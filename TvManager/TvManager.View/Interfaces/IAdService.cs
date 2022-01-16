@@ -4,7 +4,7 @@
 
     public interface IAdService
     {
-        IEnumerable<Ad> GetAds(Guid adId);
+        IEnumerable<Ad> GetAds();
         Ad GetAd(Guid adId);
         void SaveAd(Ad ad);
     }

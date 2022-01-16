@@ -6,12 +6,18 @@
     using System.Text;
     using System.Threading.Tasks;
     using TvManager.Model.Models;
+    using TvManager.Model.Repositories;
     using TvManager.View.Interfaces;
 
     internal class ShowService : IShowService
     {
-        public IEnumerable<Show> GetAllShows() => throw new NotImplementedException();
-        public Show GetShow(Guid id) => throw new NotImplementedException();
-        public void SaveShow(Show show) => throw new NotImplementedException();
+        private readonly TvManagerContext dbContext;
+        public ShowService(TvManagerContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+        public IEnumerable<Show> GetAllShows() => this.dbContext.Shows.ToList();
+        public Show GetShow(Guid id) => this.dbContext.Shows.Single(show => show.Id == id);
+        public void SaveShow(Show show) => this.dbContext.Shows.Add(show);
     }
 }
