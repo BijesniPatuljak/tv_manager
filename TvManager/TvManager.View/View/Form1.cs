@@ -1,5 +1,6 @@
 namespace TvManager.View
 {
+    using System.Windows.Forms;
     using TvManager.View.Interfaces;
 
     public partial class Form1 : Form

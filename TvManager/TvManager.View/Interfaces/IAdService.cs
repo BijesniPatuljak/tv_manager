@@ -1,5 +1,7 @@
 ﻿namespace TvManager.View.Interfaces
 {
+    using System;
+    using System.Collections.Generic;
     using TvManager.Model.Models;
 
     public interface IAdService

@@ -1,5 +1,7 @@
 ﻿namespace TvManager.View
 {
+    using System.Windows.Forms;
+
     partial class Form1
     {
         /// <summary>
