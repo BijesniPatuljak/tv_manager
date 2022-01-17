@@ -7,6 +7,7 @@ namespace TvManager.View
     using TvManager.View.Presenter;
     using System.Windows.Forms;
     using System;
+    using TvManager.View.View;
 
     public static class Program
     {
@@ -25,13 +26,21 @@ namespace TvManager.View
             var services = new ServiceCollection();
             ConfigureServices(services);
 
-            services.AddScoped<Form1>();
+            services.AddScoped<MainMenu>();
+            services.AddScoped<ViewAds>();
+            services.AddScoped<ViewShows>();
+            services.AddScoped<EditAd>();
+            services.AddScoped<EditShow>();
+            services.AddScoped<GenerateSchedule>();
 
             using (ServiceProvider serviceProvider = services.BuildServiceProvider())
             {
-                var form1 = serviceProvider.GetRequiredService<Form1>();
-                Application.Run(form1);
+                var mainMenuForm = serviceProvider.GetRequiredService<MainMenu>();
+                Application.Run(mainMenuForm);
+
             }
+
+            
 
         }
 
@@ -41,5 +50,13 @@ namespace TvManager.View
                     .AddScoped<IAdService, AdService>()
                     .AddDbContext<TvManagerContext>();
         }
+
+
+
+
+
+
+
+
     }
 }

@@ -12,18 +12,19 @@ namespace TvManager.View.View
 {
     using System.Windows.Forms;
     using TvManager.View.Interfaces;
-    public partial class GenerateSchedule : Form
+    public partial class ViewAds : Form
     {
         private IShowService showService;
         private IAdService adService;
-        public GenerateSchedule(IShowService showService, IAdService adService)
+
+        public ViewAds(IShowService showService, IAdService adService)
         {
             this.showService = showService;
             this.adService = adService;
             InitializeComponent();
         }
 
-        private void GenerateSchedule_Load(object sender, EventArgs e)
+        private void ViewAds_Load(object sender, EventArgs e)
         {
 
         }

@@ -102,6 +102,7 @@
             this.Controls.Add(this.listView1);
             this.Name = "GenerateSchedule";
             this.Text = "GenerateSchedule";
+            this.Load += new System.EventHandler(this.GenerateSchedule_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
