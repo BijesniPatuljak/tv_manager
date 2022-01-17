@@ -18,6 +18,10 @@
         }
         public IEnumerable<Show> GetAllShows() => this.dbContext.Shows.ToList();
         public Show GetShow(Guid id) => this.dbContext.Shows.Single(show => show.Id == id);
-        public void SaveShow(Show show) => this.dbContext.Shows.Add(show);
+        public void SaveShow(Show show)
+        {
+            this.dbContext.Add(show);
+            this.dbContext.SaveChanges();
+        } 
     }
 }
