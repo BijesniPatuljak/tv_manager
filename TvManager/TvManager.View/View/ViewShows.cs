@@ -22,6 +22,23 @@ namespace TvManager.View.View
             this.showService = showService;
             this.adService = adService;
             InitializeComponent();
+
+            var shows = showService.GetAllShows();
+
+            foreach (var item in shows)
+            {
+                listBox1.Items.Add(item.Name);
+            }
+
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void ViewShows_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -12,6 +12,7 @@ namespace TvManager.View.View
 {
     using System.Windows.Forms;
     using TvManager.View.Interfaces;
+    using TvManager.Model.Models;
     public partial class EditAd : Form
     {
         private IShowService showService;
@@ -31,6 +32,17 @@ namespace TvManager.View.View
 
         private void button1_Click(object sender, EventArgs e)
         {
+            var checkedButton = groupBox1.Controls.OfType<RadioButton>()
+                                      .FirstOrDefault(r => r.Checked).Text;
+            textBox1.Text = checkedButton.ToString();
+
+            Ad ad = new Ad();
+            ad.Id = Guid.NewGuid();
+            ad.Name = textBox1.Text;
+            ad.Duration = TimeSpan.Parse(textBox2.Text);
+            ad.Cost = decimal.Parse(textBox3.Text);
+
+            adService.SaveAd(ad);
 
         }
 
@@ -50,6 +62,27 @@ namespace TvManager.View.View
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+            
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EditAd_Load(object sender, EventArgs e)
         {
 
         }

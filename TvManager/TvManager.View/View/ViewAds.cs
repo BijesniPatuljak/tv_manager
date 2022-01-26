@@ -22,9 +22,22 @@ namespace TvManager.View.View
             this.showService = showService;
             this.adService = adService;
             InitializeComponent();
+
+            var ads = adService.GetAds();
+
+            foreach (var item in ads)
+            {
+                listBox1.Items.Add(item.Name);
+            }
+
         }
 
         private void ViewAds_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
