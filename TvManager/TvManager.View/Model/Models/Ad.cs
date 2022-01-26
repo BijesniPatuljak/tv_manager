@@ -11,6 +11,9 @@
         public Guid Id { get; set; }
         public string Name { get; set; }
         public TimeSpan Duration { get; set; }
+        public TimeSpan StartTime { get; set; }
+
+        public int Priority { get; set; }
         public decimal Cost { get; set; }
 
     }

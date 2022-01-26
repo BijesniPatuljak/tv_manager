@@ -38,7 +38,7 @@ namespace TvManager.View.View
         private void FillForm(Show show)
         {
             textBox_name.Text = show.Name.ToString();
-            textBox_timeslot.Text = show.PreferredTimeSlot.ToString();
+            textBox_timeslot.Text = show.StartTime.ToString();
             textBox_id.Text = show.Id.ToString();
 
             Controls.OfType<RadioButton>().FirstOrDefault(b => b.Name == "radioButton" + (10 - show.Priority)).Checked = true;
@@ -56,15 +56,13 @@ namespace TvManager.View.View
         {
 
             currentShow.Id = Guid.Parse(textBox_id.Text);
-            currentShow.PreferredTimeSlot = TimeSpan.Parse(textBox_timeslot.Text);
+            currentShow.StartTime = TimeSpan.Parse(textBox_timeslot.Text);
             currentShow.Name = textBox_name.Text;
 
             var checkedButton = priorities.Controls.OfType<RadioButton>()
                                       .FirstOrDefault(r => r.Checked).Text;
 
             currentShow.Priority = Int32.Parse(checkedButton.ToString());
-
-
 
 
             showService.SaveShow(currentShow);

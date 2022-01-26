@@ -21,9 +21,28 @@ namespace TvManager.View.View
             this.showService = showService;
             this.adService = adService;
             InitializeComponent();
+
+            var ads = adService.GetAds();
+
+            foreach (var item in ads)
+            {
+                listView2.Items.Add(item.Name + " " + item.Cost.ToString() + " " + item.Duration.ToString("mm':'ss"));
+            }
+
+            var shows = showService.GetAllShows();
+
+            foreach (var item in shows)
+            {
+                listView1.Items.Add(item.Name + " " + item.StartTime.ToString("hh':'mm") + " P:" + item.Priority.ToString());
+            }
         }
 
         private void GenerateSchedule_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

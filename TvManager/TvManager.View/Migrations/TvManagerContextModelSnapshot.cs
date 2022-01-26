@@ -53,7 +53,7 @@ namespace TvManager.View.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<TimeSpan>("PreferredTimeSlot")
+                    b.Property<TimeSpan>("StartTime")
                         .HasColumnType("interval");
 
                     b.Property<int>("Priority")

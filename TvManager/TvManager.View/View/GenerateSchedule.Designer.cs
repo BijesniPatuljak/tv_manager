@@ -41,9 +41,10 @@
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(23, 54);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(121, 401);
+            this.listView1.Size = new System.Drawing.Size(202, 401);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -57,9 +58,9 @@
             // listView2
             // 
             this.listView2.HideSelection = false;
-            this.listView2.Location = new System.Drawing.Point(430, 54);
+            this.listView2.Location = new System.Drawing.Point(338, 54);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(121, 401);
+            this.listView2.Size = new System.Drawing.Size(213, 401);
             this.listView2.TabIndex = 2;
             this.listView2.UseCompatibleStateImageBehavior = false;
             // 

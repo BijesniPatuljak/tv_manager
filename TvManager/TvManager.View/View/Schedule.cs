@@ -7,6 +7,15 @@ using TvManager.Model.Models;
 
 namespace TvManager.View.View
 {
+
+    public class ScheduleItem
+    {
+
+
+        public DateTime StartTime { get; set; }
+        public TimeSpan Duration{ get; set; }
+    }
+
     internal class Schedule
     {
         public Dictionary<int, Ad> ads = new Dictionary<int, Ad>();
