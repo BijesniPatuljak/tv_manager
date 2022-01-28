@@ -12,6 +12,7 @@ namespace TvManager.View.View
 {
     using System.Windows.Forms;
     using TvManager.View.Interfaces;
+    using TvManager.Model.Models;
     public partial class GenerateSchedule : Form
     {
         private IShowService showService;
@@ -45,6 +46,14 @@ namespace TvManager.View.View
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
+
+            ViewSchedule form = new ViewSchedule(this.showService, this.adService);
+            form.ShowDialog();
         }
     }
 }

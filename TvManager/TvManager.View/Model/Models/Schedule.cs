@@ -11,8 +11,8 @@ namespace TvManager.Model.Models
     [NotMapped]
     internal class Schedule
     {
-        public Dictionary<int, Ad> ads = new Dictionary<int, Ad>();
-        public Dictionary<int, Show> shows = new Dictionary<int, Show>();
+        public Dictionary<TimeSpan, Ad> ads = new Dictionary<TimeSpan, Ad>();
+        public Dictionary<TimeSpan, Show> shows = new Dictionary<TimeSpan, Show>();
 
 
     }
