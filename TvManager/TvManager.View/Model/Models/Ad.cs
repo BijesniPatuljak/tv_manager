@@ -6,9 +6,13 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class Ad: ScheduleItem
+    public class Ad
     {
-        
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan Duration { get; set; }
+        public int Priority { get; set; }
         public decimal Cost { get; set; }
 
     }

@@ -3,27 +3,20 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TvManager.View.Migrations
 {
-    public partial class TvManagerInheritedModels : Migration
+    public partial class TvManagerUpdatedModels : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "Ads");
-
-            migrationBuilder.DropTable(
-                name: "Shows");
-        }
-
-        protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "Ads",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Cost = table.Column<decimal>(type: "numeric", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    StartTime = table.Column<TimeSpan>(type: "interval", nullable: false),
                     Duration = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Cost = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -36,13 +29,23 @@ namespace TvManager.View.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    StartTime = table.Column<TimeSpan>(type: "interval", nullable: false)
+                    StartTime = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    Duration = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    Priority = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Shows", x => x.Id);
                 });
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "Ads");
+
+            migrationBuilder.DropTable(
+                name: "Shows");
         }
     }
 }
