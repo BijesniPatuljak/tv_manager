@@ -4,18 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TvManager.Model.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TvManager.View.View
+namespace TvManager.Model.Models
 {
-
-    public class ScheduleItem
-    {
-
-
-        public DateTime StartTime { get; set; }
-        public TimeSpan Duration{ get; set; }
-    }
-
+    [NotMapped]
     internal class Schedule
     {
         public Dictionary<int, Ad> ads = new Dictionary<int, Ad>();
