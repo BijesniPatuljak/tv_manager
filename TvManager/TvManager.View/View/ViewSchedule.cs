@@ -46,6 +46,8 @@ namespace TvManager.View.View
         private IAdService adService;
 
 
+        List<object>? obavezne = MainMenu.emisije_i_reklame;
+
         private List<ScheduleItem_show> CrossCheckShows(
             List<ScheduleItem_show> shows,
             List<ScheduleItem_show> final)
@@ -82,14 +84,7 @@ namespace TvManager.View.View
 
             return shows;
 
-
-
-
-
-
         }
-
-
 
         /*
          Function removes some_shows from all_shows (all_shows = shows left to add to schedule),
@@ -145,6 +140,19 @@ namespace TvManager.View.View
 
 
             var shows = showService.GetAllShows().ToList();
+
+
+            //prema unosu u MainMenu, postavlja se ekstra veliki prioritet (10) na odabrane showove
+
+            foreach (var item in shows)
+            {
+
+                if (obavezne.Contains(item.Name)) item.Priority = 10;
+                
+            }
+
+
+
             var schedule_show = new List<ScheduleItem_show>();
             foreach (var show in shows)
             {
@@ -161,7 +169,7 @@ namespace TvManager.View.View
                 temp.ad_offset = new TimeSpan();
                 temp.max_offset = TimeSpan.Parse(maxTimeSpans[show.Priority]);
                 temp.max_ad_offset = TimeSpan.Parse(maxAdTimeSpans[show.Priority]);
-                temp.fixed_time = show.Priority == 9? true:false;
+                temp.fixed_time = show.Priority == 9? true:false; //mozes li tu provjeriti i za prioritet 10?
 
                 schedule_show.Add(temp);
             }
@@ -186,7 +194,7 @@ namespace TvManager.View.View
             var final_shows = new List <ScheduleItem_show>();
 
 
-            for(int p = 9; p >= 6; p--)
+            for(int p = 10; p >= 6; p--)
             {
                 Debug.WriteLine("P = " + p);
 
@@ -207,6 +215,10 @@ namespace TvManager.View.View
                 
 
             }
+
+            //Sortira listu prema planiranom vremenu pocetka
+
+            final_shows.Sort((s1, s2) => s1.show.StartTime.CompareTo(s2.show.StartTime));
 
 
 

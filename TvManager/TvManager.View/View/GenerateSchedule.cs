@@ -23,10 +23,14 @@ namespace TvManager.View.View
             this.adService = adService;
             InitializeComponent();
 
+            List<object>? obavezne = MainMenu.emisije_i_reklame;
+
+
             var ads = adService.GetAds();
 
             foreach (var item in ads)
             {
+                if (obavezne.Contains(item.Name)) item.Priority = 10;
                 listView2.Items.Add(item.Name + " " + item.Cost.ToString() + " " + item.Duration.ToString("mm':'ss"));
             }
 
@@ -34,6 +38,8 @@ namespace TvManager.View.View
 
             foreach (var item in shows)
             {
+
+                if (obavezne.Contains(item.Name)) item.Priority = 10; 
                 listBox1.Items.Add(item.Name + " " + item.StartTime.ToString("hh':'mm") + " P:" + item.Priority.ToString());
             }
         }

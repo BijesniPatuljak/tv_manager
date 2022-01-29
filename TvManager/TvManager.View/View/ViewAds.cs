@@ -41,5 +41,11 @@ namespace TvManager.View.View
         {
 
         }
+
+        private void AddAd_Click(object sender, EventArgs e)
+        {
+            ViewAds form = new ViewAds(this.showService, this.adService);
+            form.ShowDialog();
+        }
     }
 }
