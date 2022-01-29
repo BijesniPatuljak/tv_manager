@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Reklama1");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Film", new System.Windows.Forms.TreeNode[] {
-            treeNode3});
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Reklama1");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Film", new System.Windows.Forms.TreeNode[] {
+            treeNode1});
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.SuspendLayout();
@@ -50,24 +50,25 @@
             this.treeView1.Cursor = System.Windows.Forms.Cursors.Default;
             this.treeView1.Location = new System.Drawing.Point(258, 21);
             this.treeView1.Name = "treeView1";
-            treeNode3.Name = "Reklama1";
-            treeNode3.Text = "Reklama1";
-            treeNode4.Name = "Film";
-            treeNode4.Text = "Film";
+            treeNode1.Name = "Reklama1";
+            treeNode1.Text = "Reklama1";
+            treeNode2.Name = "Film";
+            treeNode2.Text = "Film";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode4});
+            treeNode2});
             this.treeView1.Size = new System.Drawing.Size(121, 97);
             this.treeView1.TabIndex = 1;
             // 
-            // Schedule
+            // ViewSchedule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(665, 450);
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.listBox1);
-            this.Name = "Schedule";
+            this.Name = "ViewSchedule";
             this.Text = "Schedule";
+            this.Load += new System.EventHandler(this.ViewSchedule_Load);
             this.ResumeLayout(false);
 
         }

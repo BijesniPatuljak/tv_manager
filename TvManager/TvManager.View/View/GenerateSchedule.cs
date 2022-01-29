@@ -34,7 +34,7 @@ namespace TvManager.View.View
 
             foreach (var item in shows)
             {
-                listView1.Items.Add(item.Name + " " + item.StartTime.ToString("hh':'mm") + " P:" + item.Priority.ToString());
+                listBox1.Items.Add(item.Name + " " + item.StartTime.ToString("hh':'mm") + " P:" + item.Priority.ToString());
             }
         }
 
