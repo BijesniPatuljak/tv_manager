@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
 
 
 namespace TvManager.View.View
@@ -28,7 +29,7 @@ namespace TvManager.View.View
         public List<Show> final_shows = new List<Show>();
         public List<Ad> final_ads = new List<Ad>();
 
-        List<object>? obavezne = MainMenu.emisije_i_reklame;
+
 
 
 
@@ -335,22 +336,30 @@ namespace TvManager.View.View
 
             foreach (var show in final_shows)
             {
-                listBox1.Items.Add(show.StartTime.ToString() + " " +show.Duration.ToString() + "  " + show.Name + " P:" + show.Priority);
+                string[] row = {
+                    show.Name,
+                    show.StartTime.ToString(),
+                    show.Duration.ToString() };
+
+
+                result_table.Rows.Add(row);
             }
             foreach (var ad in final_ads)
             {
-                listBox1.Items.Add(ad.StartTime.ToString() + " " + ad.Duration.ToString() + " AD " + ad.Name + " P:" + ad.Priority);
+                string[] row = {
+                    ad.Name,
+                    ad.StartTime.ToString(),
+                    ad.Duration.ToString() };
+
+                result_table.Rows.Add(row);
             }
 
-            listBox1.Sorted = true;
+            result_table.Sort(result_table.Columns["ResultStartTime"], ListSortDirection.Ascending);
 
 
         }
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
-        }
 
         private void ViewSchedule_Load(object sender, EventArgs e)
         {
@@ -359,7 +368,31 @@ namespace TvManager.View.View
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
+            string file = "c:\\raspored.bin";
+            using (BinaryWriter bw = new BinaryWriter(File.Open(file, FileMode.Create)))
+            {
+                bw.Write(result_table.Columns.Count);
+                bw.Write(result_table.Rows.Count);
+                foreach (DataGridViewRow dgvR in result_table.Rows)
+                {
+                    for (int j = 0; j < result_table.Columns.Count; ++j)
+                    {
+                        object val = dgvR.Cells[j].Value;
+                        if (val == null)
+                        {
+                            bw.Write(false);
+                            bw.Write(false);
+                        }
+                        else
+                        {
+                            bw.Write(true);
+                            bw.Write(val.ToString());
+                        }
+                    }
+                }
+            }
+
+                this.DialogResult = DialogResult.OK;
             this.Close();
         }
     }

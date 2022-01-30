@@ -38,7 +38,13 @@
             this.button2 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.table_ads = new System.Windows.Forms.DataGridView();
+            this.AdTableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AdTableStartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AdTableDuration = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.show_table = new System.Windows.Forms.DataGridView();
+            this.TableShowName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TableShowStartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TableShowDuration = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.delete_all_shows = new System.Windows.Forms.Button();
             this.delete_show = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -46,12 +52,7 @@
             this.ResultName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ResultStartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ResultDuration = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AdTableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AdTableStartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AdTableDuration = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TableShowName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TableShowStartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TableShowDuration = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.buttonSave = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -122,6 +123,7 @@
             // HardEdit
             // 
             this.HardEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.HardEdit.Enabled = false;
             this.HardEdit.Location = new System.Drawing.Point(130, 3);
             this.HardEdit.Name = "HardEdit";
             this.HardEdit.Size = new System.Drawing.Size(101, 23);
@@ -202,6 +204,24 @@
             this.table_ads.TabIndex = 14;
             this.table_ads.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.table_ads_CellContentClick);
             // 
+            // AdTableName
+            // 
+            this.AdTableName.HeaderText = "Name";
+            this.AdTableName.Name = "AdTableName";
+            this.AdTableName.ReadOnly = true;
+            // 
+            // AdTableStartTime
+            // 
+            this.AdTableStartTime.HeaderText = "Start Time";
+            this.AdTableStartTime.Name = "AdTableStartTime";
+            this.AdTableStartTime.ReadOnly = true;
+            // 
+            // AdTableDuration
+            // 
+            this.AdTableDuration.HeaderText = "Duration";
+            this.AdTableDuration.Name = "AdTableDuration";
+            this.AdTableDuration.ReadOnly = true;
+            // 
             // show_table
             // 
             this.show_table.AllowUserToAddRows = false;
@@ -222,6 +242,24 @@
             this.show_table.Size = new System.Drawing.Size(371, 192);
             this.show_table.TabIndex = 13;
             this.show_table.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.result_table_CellContentClick);
+            // 
+            // TableShowName
+            // 
+            this.TableShowName.HeaderText = "Name";
+            this.TableShowName.Name = "TableShowName";
+            this.TableShowName.ReadOnly = true;
+            // 
+            // TableShowStartTime
+            // 
+            this.TableShowStartTime.HeaderText = "Start Time";
+            this.TableShowStartTime.Name = "TableShowStartTime";
+            this.TableShowStartTime.ReadOnly = true;
+            // 
+            // TableShowDuration
+            // 
+            this.TableShowDuration.HeaderText = "Duration";
+            this.TableShowDuration.Name = "TableShowDuration";
+            this.TableShowDuration.ReadOnly = true;
             // 
             // delete_all_shows
             // 
@@ -259,6 +297,7 @@
             // 
             // splitContainer2.Panel2
             // 
+            this.splitContainer2.Panel2.Controls.Add(this.buttonSave);
             this.splitContainer2.Panel2.Controls.Add(this.HardEdit);
             this.splitContainer2.Size = new System.Drawing.Size(822, 29);
             this.splitContainer2.SplitterDistance = 573;
@@ -266,6 +305,7 @@
             // 
             // result_table
             // 
+            this.result_table.AllowDrop = true;
             this.result_table.AllowUserToAddRows = false;
             this.result_table.AllowUserToDeleteRows = false;
             this.result_table.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -303,41 +343,16 @@
             this.ResultDuration.Name = "ResultDuration";
             this.ResultDuration.ReadOnly = true;
             // 
-            // AdTableName
+            // buttonSave
             // 
-            this.AdTableName.HeaderText = "Name";
-            this.AdTableName.Name = "AdTableName";
-            this.AdTableName.ReadOnly = true;
-            // 
-            // AdTableStartTime
-            // 
-            this.AdTableStartTime.HeaderText = "Start Time";
-            this.AdTableStartTime.Name = "AdTableStartTime";
-            this.AdTableStartTime.ReadOnly = true;
-            // 
-            // AdTableDuration
-            // 
-            this.AdTableDuration.HeaderText = "Duration";
-            this.AdTableDuration.Name = "AdTableDuration";
-            this.AdTableDuration.ReadOnly = true;
-            // 
-            // TableShowName
-            // 
-            this.TableShowName.HeaderText = "Name";
-            this.TableShowName.Name = "TableShowName";
-            this.TableShowName.ReadOnly = true;
-            // 
-            // TableShowStartTime
-            // 
-            this.TableShowStartTime.HeaderText = "Start Time";
-            this.TableShowStartTime.Name = "TableShowStartTime";
-            this.TableShowStartTime.ReadOnly = true;
-            // 
-            // TableShowDuration
-            // 
-            this.TableShowDuration.HeaderText = "Duration";
-            this.TableShowDuration.Name = "TableShowDuration";
-            this.TableShowDuration.ReadOnly = true;
+            this.buttonSave.Enabled = false;
+            this.buttonSave.Location = new System.Drawing.Point(3, 3);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(104, 23);
+            this.buttonSave.TabIndex = 9;
+            this.buttonSave.Text = "Save Schedule";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // MainMenu
             // 
@@ -394,5 +409,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn TableShowName;
         private System.Windows.Forms.DataGridViewTextBoxColumn TableShowStartTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn TableShowDuration;
+        private System.Windows.Forms.Button buttonSave;
     }
 }

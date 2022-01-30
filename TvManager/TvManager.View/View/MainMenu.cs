@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TvManager.Model.Models;
+using System.IO;
+
 namespace TvManager.View.View
 {
     using System.Windows.Forms;
@@ -20,14 +22,8 @@ namespace TvManager.View.View
         public List<Show> final_shows = new List<Show>();
         public List<Ad> final_ads = new List<Ad>();
 
-        private static List<object> Emisije_i_Reklame = new List<object>();
 
-        public static List<object> emisije_i_reklame
-        {
-            set {; }
-            get { return Emisije_i_Reklame; }
-        }
-
+        bool zastava = false;
 
 
         public MainMenu(IShowService showService, IAdService adService)
@@ -138,6 +134,9 @@ namespace TvManager.View.View
             }
 
             FillListBox();
+            zastava = true;
+            HardEdit.Enabled = true;
+            buttonSave.Enabled = true;
         }
 
         private void buttonAddAd_Click(object sender, EventArgs e)
@@ -171,50 +170,21 @@ namespace TvManager.View.View
         }
 
 
-        private void MainSchedule_DragLeave(object sender, EventArgs e)
-        {
-
-            //Draganje sa Main schedule-a mice taj item sa item_lista
-
-            ListBox lb = sender as ListBox;
-            lb_item = lb.SelectedItem;
-            lb.Items.Remove(lb.SelectedItem);
-
-
-
-        }
-
-        private void MainSchedule_DragEnter(object sender, DragEventArgs e)
-        {
-
-            /*U MainSchedule se ubacuju elementi s lista koji su "obavezni" - mozemo im postaviti prioritet na 10+
-             Nakon toga se klikne na generate schedule i on poziva sve kao i generate schedule, samo mu prenosimo ono sto
-            smo ubacili u ovaj textbox s novim prioritetom
-            Preneseno je u listi emisije_i_reklame koja se u GenerateSchedule i ViewSchedule prevodi u listu "obavezne"
-            AKA to je obavezno da bude u rasporedu*/
-
-
-            if (lb_item != null)
-            {
-                Emisije_i_Reklame.Add(lb_item); // lb_item je samo ime show-a/ add-a, pogledaj prvih 30 linija koda
-                //MainSchedule.Items.Add(lb_item);
-                lb_item = null;
-            }
-        }
-
-        private void MainSchedule_DragDrop(object sender, DragEventArgs e)
-        {
-            lb_item = null;
-        }
-
         private void MainSchedule_DoubleClick(object sender, EventArgs e)
         {
+            if (zastava)
+            {
+                ViewSchedule form = new ViewSchedule(this.showService, this.adService);
+                form.ShowDialog();
+
+            }
             //Hard Edit
         }
 
         private void HardEdit_Click(object sender, EventArgs e)
         {
-            //Hard Edit
+            ViewSchedule form = new ViewSchedule(this.showService, this.adService);
+            form.ShowDialog();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -227,11 +197,7 @@ namespace TvManager.View.View
             adService.DeleteAd(ads[ind.Index]);
 
 
-
-
             FillListBox();
-
-
 
         }
 
@@ -296,6 +262,38 @@ namespace TvManager.View.View
         private void result_table_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+          
+            string file = "c:\\raspored.bin";
+            using (BinaryWriter bw = new BinaryWriter(File.Open(file, FileMode.Create)))
+            {
+                bw.Write(result_table.Columns.Count);
+                bw.Write(result_table.Rows.Count);
+                foreach (DataGridViewRow dgvR in result_table.Rows)
+                {
+                    for (int j = 0; j < result_table.Columns.Count; ++j)
+                    {
+                        object val = dgvR.Cells[j].Value;
+                        if (val == null)
+                        {
+                            bw.Write(false);
+                            bw.Write(false);
+                        }
+                        else
+                        {
+                            bw.Write(true);
+                            bw.Write(val.ToString());
+                        }
+                    }
+                }
+            }
+
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+            
         }
     }
 }
