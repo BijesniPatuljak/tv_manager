@@ -301,8 +301,8 @@ namespace TvManager.View.View
                     
                     TimeSpan newTimeSpan = FindFreeTimeSpan(
                         ref final, 
-                        new_show.StartTime, 
-                        new_show.Duration + TimeSpan.FromMinutes(10));
+                        new_show.StartTime - TimeSpan.FromMinutes(5), 
+                        new_show.Duration + TimeSpan.FromMinutes(5));
 
                     new_show.StartTime = newTimeSpan + TimeSpan.FromMinutes(5);
 
