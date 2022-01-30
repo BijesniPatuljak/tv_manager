@@ -33,28 +33,36 @@
             this.buttonAddShow = new System.Windows.Forms.Button();
             this.buttonViewShows = new System.Windows.Forms.Button();
             this.buttonGenerate = new System.Windows.Forms.Button();
-            this.MainAds = new System.Windows.Forms.ListBox();
-            this.MainSchedule = new System.Windows.Forms.ListBox();
             this.HardEdit = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.table_ads = new System.Windows.Forms.DataGridView();
             this.show_table = new System.Windows.Forms.DataGridView();
-            this.Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Duration = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.delete_all_shows = new System.Windows.Forms.Button();
             this.delete_show = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.result_table = new System.Windows.Forms.DataGridView();
+            this.ResultName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ResultStartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ResultDuration = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AdTableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AdTableStartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AdTableDuration = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TableShowName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TableShowStartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TableShowDuration = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.table_ads)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.show_table)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.result_table)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonViewAds
@@ -111,36 +119,6 @@
             this.buttonGenerate.UseVisualStyleBackColor = true;
             this.buttonGenerate.Click += new System.EventHandler(this.buttonGenerate_Click);
             // 
-            // MainAds
-            // 
-            this.MainAds.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.MainAds.FormattingEnabled = true;
-            this.MainAds.ItemHeight = 15;
-            this.MainAds.Location = new System.Drawing.Point(12, 13);
-            this.MainAds.Name = "MainAds";
-            this.MainAds.Size = new System.Drawing.Size(390, 199);
-            this.MainAds.TabIndex = 5;
-            this.MainAds.SelectedIndexChanged += new System.EventHandler(this.MainAds_SelectedIndexChanged);
-            this.MainAds.DoubleClick += new System.EventHandler(this.MainAds_DoubleClick);
-            // 
-            // MainSchedule
-            // 
-            this.MainSchedule.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.MainSchedule.FormattingEnabled = true;
-            this.MainSchedule.ItemHeight = 15;
-            this.MainSchedule.Location = new System.Drawing.Point(24, 317);
-            this.MainSchedule.Name = "MainSchedule";
-            this.MainSchedule.Size = new System.Drawing.Size(810, 169);
-            this.MainSchedule.TabIndex = 7;
-            this.MainSchedule.SelectedIndexChanged += new System.EventHandler(this.MainSchedule_SelectedIndexChanged);
-            this.MainSchedule.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainSchedule_DragDrop);
-            this.MainSchedule.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainSchedule_DragEnter);
-            this.MainSchedule.DragLeave += new System.EventHandler(this.MainSchedule_DragLeave);
-            this.MainSchedule.DoubleClick += new System.EventHandler(this.MainSchedule_DoubleClick);
-            // 
             // HardEdit
             // 
             this.HardEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -184,7 +162,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.MainAds);
+            this.splitContainer1.Panel1.Controls.Add(this.table_ads);
             this.splitContainer1.Panel1.Controls.Add(this.button1);
             this.splitContainer1.Panel1.Controls.Add(this.button2);
             this.splitContainer1.Panel1.Controls.Add(this.buttonViewAds);
@@ -203,38 +181,47 @@
             this.splitContainer1.SplitterDistance = 415;
             this.splitContainer1.TabIndex = 11;
             // 
+            // table_ads
+            // 
+            this.table_ads.AllowUserToAddRows = false;
+            this.table_ads.AllowUserToDeleteRows = false;
+            this.table_ads.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.table_ads.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.table_ads.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.table_ads.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.AdTableName,
+            this.AdTableStartTime,
+            this.AdTableDuration});
+            this.table_ads.Location = new System.Drawing.Point(12, 12);
+            this.table_ads.Name = "table_ads";
+            this.table_ads.ReadOnly = true;
+            this.table_ads.RowTemplate.Height = 25;
+            this.table_ads.Size = new System.Drawing.Size(390, 192);
+            this.table_ads.TabIndex = 14;
+            this.table_ads.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.table_ads_CellContentClick);
+            // 
             // show_table
             // 
+            this.show_table.AllowUserToAddRows = false;
+            this.show_table.AllowUserToDeleteRows = false;
             this.show_table.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.show_table.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.show_table.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.show_table.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Name,
-            this.StartTime,
-            this.Duration});
-            this.show_table.Location = new System.Drawing.Point(4, 12);
+            this.TableShowName,
+            this.TableShowStartTime,
+            this.TableShowDuration});
+            this.show_table.Location = new System.Drawing.Point(18, 12);
             this.show_table.Name = "show_table";
+            this.show_table.ReadOnly = true;
             this.show_table.RowTemplate.Height = 25;
-            this.show_table.Size = new System.Drawing.Size(385, 192);
+            this.show_table.Size = new System.Drawing.Size(371, 192);
             this.show_table.TabIndex = 13;
             this.show_table.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.result_table_CellContentClick);
-            // 
-            // Name
-            // 
-            this.Name.HeaderText = "Name";
-            this.Name.Name = "Name";
-            // 
-            // StartTime
-            // 
-            this.StartTime.HeaderText = "Start Time";
-            this.StartTime.Name = "StartTime";
-            // 
-            // Duration
-            // 
-            this.Duration.HeaderText = "Duration";
-            this.Duration.Name = "Duration";
             // 
             // delete_all_shows
             // 
@@ -277,26 +264,103 @@
             this.splitContainer2.SplitterDistance = 573;
             this.splitContainer2.TabIndex = 12;
             // 
+            // result_table
+            // 
+            this.result_table.AllowUserToAddRows = false;
+            this.result_table.AllowUserToDeleteRows = false;
+            this.result_table.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.result_table.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.result_table.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.result_table.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ResultName,
+            this.ResultStartTime,
+            this.ResultDuration});
+            this.result_table.Location = new System.Drawing.Point(24, 317);
+            this.result_table.Name = "result_table";
+            this.result_table.ReadOnly = true;
+            this.result_table.RowTemplate.Height = 25;
+            this.result_table.Size = new System.Drawing.Size(807, 176);
+            this.result_table.TabIndex = 14;
+            this.result_table.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.result_table_CellContentClick_1);
+            // 
+            // ResultName
+            // 
+            this.ResultName.HeaderText = "Name";
+            this.ResultName.Name = "ResultName";
+            this.ResultName.ReadOnly = true;
+            // 
+            // ResultStartTime
+            // 
+            this.ResultStartTime.HeaderText = "Start Time";
+            this.ResultStartTime.Name = "ResultStartTime";
+            this.ResultStartTime.ReadOnly = true;
+            // 
+            // ResultDuration
+            // 
+            this.ResultDuration.HeaderText = "Duration";
+            this.ResultDuration.Name = "ResultDuration";
+            this.ResultDuration.ReadOnly = true;
+            // 
+            // AdTableName
+            // 
+            this.AdTableName.HeaderText = "Name";
+            this.AdTableName.Name = "AdTableName";
+            this.AdTableName.ReadOnly = true;
+            // 
+            // AdTableStartTime
+            // 
+            this.AdTableStartTime.HeaderText = "Start Time";
+            this.AdTableStartTime.Name = "AdTableStartTime";
+            this.AdTableStartTime.ReadOnly = true;
+            // 
+            // AdTableDuration
+            // 
+            this.AdTableDuration.HeaderText = "Duration";
+            this.AdTableDuration.Name = "AdTableDuration";
+            this.AdTableDuration.ReadOnly = true;
+            // 
+            // TableShowName
+            // 
+            this.TableShowName.HeaderText = "Name";
+            this.TableShowName.Name = "TableShowName";
+            this.TableShowName.ReadOnly = true;
+            // 
+            // TableShowStartTime
+            // 
+            this.TableShowStartTime.HeaderText = "Start Time";
+            this.TableShowStartTime.Name = "TableShowStartTime";
+            this.TableShowStartTime.ReadOnly = true;
+            // 
+            // TableShowDuration
+            // 
+            this.TableShowDuration.HeaderText = "Duration";
+            this.TableShowDuration.Name = "TableShowDuration";
+            this.TableShowDuration.ReadOnly = true;
+            // 
             // MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(846, 505);
+            this.Controls.Add(this.result_table);
             this.Controls.Add(this.splitContainer2);
             this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.MainSchedule);
             this.Name = "MainMenu";
-            this.Text = "MainMenu2";
+            this.Text = "MainMenu";
             this.Load += new System.EventHandler(this.MainMenu_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.table_ads)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.show_table)).EndInit();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.result_table)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -308,8 +372,6 @@
         private System.Windows.Forms.Button buttonAddShow;
         private System.Windows.Forms.Button buttonViewShows;
         private System.Windows.Forms.Button buttonGenerate;
-        private System.Windows.Forms.ListBox MainAds;
-        private System.Windows.Forms.ListBox MainSchedule;
         private System.Windows.Forms.Button HardEdit;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
@@ -318,8 +380,19 @@
         private System.Windows.Forms.Button delete_all_shows;
         private System.Windows.Forms.Button delete_show;
         private System.Windows.Forms.DataGridView show_table;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn StartTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Duration;
+        private System.Windows.Forms.DataGridView table_ads;
+        private System.Windows.Forms.DataGridView result_table;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ResultName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ResultStartTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ResultDuration;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AdTableName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AdTableStartTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AdTableDuration;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TableShowName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TableShowStartTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TableShowDuration;
     }
 }

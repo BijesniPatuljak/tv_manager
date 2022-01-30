@@ -44,9 +44,11 @@ namespace TvManager.View.View
         private void FillListBox()
         {
             //MainShows.Items.Clear();
-            MainAds.Items.Clear();
-            MainSchedule.Items.Clear();
+            //MainAds.Items.Clear();
+            //MainSchedule.Items.Clear();
+            result_table.Rows.Clear();
             show_table.Rows.Clear();
+            table_ads.Rows.Clear();
 
 
             var shows = showService.GetAllShows();
@@ -67,21 +69,39 @@ namespace TvManager.View.View
 
             foreach (var item in ads)
             {
-                MainAds.Items.Add(item.Name + " " + item.StartTime + " " + item.Duration + " P:" + item.Priority);
+                //MainAds.Items.Add(item.Name + " " + item.StartTime + " " + item.Duration + " P:" + item.Priority);
+                string[] row = { item.Name, item.StartTime.ToString(), item.Duration.ToString() };
+
+                table_ads.Rows.Add(row);
+
             }
 
 
 
             foreach (var show in final_shows)
             {
-                MainSchedule.Items.Add(show.StartTime.ToString() + " " + show.Duration.ToString() + "  " + show.Name + " P:" + show.Priority);
+
+                string[] row = {
+                    show.Name,
+                    show.StartTime.ToString(),
+                    show.Duration.ToString() };
+
+
+                result_table.Rows.Add(row);
             }
             foreach (var ad in final_ads)
             {
-                MainSchedule.Items.Add(ad.StartTime.ToString() + " " + ad.Duration.ToString() + " AD " + ad.Name + " P:" + ad.Priority);
+
+                string[] row = {
+                    ad.Name,
+                    ad.StartTime.ToString(),
+                    ad.Duration.ToString() };
+
+                result_table.Rows.Add(row);
+                //MainSchedule.Items.Add(ad.StartTime.ToString() + " " + ad.Duration.ToString() + " AD " + ad.Name + " P:" + ad.Priority);
             }
 
-            MainSchedule.Sorted = true;
+            result_table.Sort(result_table.Columns["ResultStartTime"], ListSortDirection.Ascending);
         }
 
         private void MainMenu_Load(object sender, EventArgs e)
@@ -177,7 +197,7 @@ namespace TvManager.View.View
             if (lb_item != null)
             {
                 Emisije_i_Reklame.Add(lb_item); // lb_item je samo ime show-a/ add-a, pogledaj prvih 30 linija koda
-                MainSchedule.Items.Add(lb_item);
+                //MainSchedule.Items.Add(lb_item);
                 lb_item = null;
             }
         }
@@ -200,11 +220,13 @@ namespace TvManager.View.View
         private void button1_Click(object sender, EventArgs e)
         {
 
-            var ind = MainAds.SelectedIndex;
+            var ind = table_ads.SelectedRows[0];
 
             var ads = adService.GetAds().ToList();
 
-            adService.DeleteAd(ads[ind]);
+            adService.DeleteAd(ads[ind.Index]);
+
+
 
 
             FillListBox();
@@ -262,6 +284,16 @@ namespace TvManager.View.View
         }
 
         private void result_table_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void table_ads_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void result_table_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
 
         }
