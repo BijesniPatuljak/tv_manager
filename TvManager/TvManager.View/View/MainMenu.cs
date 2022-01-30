@@ -81,7 +81,7 @@ namespace TvManager.View.View
 
         private void buttonGenerate_Click(object sender, EventArgs e)
         {
-            GenerateSchedule form = new GenerateSchedule(this.showService,this.adService);
+            ViewSchedule form = new ViewSchedule(this.showService,this.adService);
             form.ShowDialog();
 
             FillListBox();
@@ -166,7 +166,6 @@ namespace TvManager.View.View
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string text = MainAds.GetItemText(MainAds.SelectedItem);
 
             var ind = MainAds.SelectedIndex;
 
@@ -191,6 +190,35 @@ namespace TvManager.View.View
             adService.DeleteAllAds();
 
 
+            FillListBox();
+        }
+
+        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void delete_show_Click(object sender, EventArgs e)
+        {
+
+            var ind = MainShows.SelectedIndex;
+
+            var shows = showService.GetAllShows().ToList();
+
+            showService.DeleteShow(shows[ind]);
+
+
+            FillListBox();
+        }
+
+        private void delete_all_shows_Click(object sender, EventArgs e)
+        {
+            showService.DeleteAllShows();
             FillListBox();
         }
     }
