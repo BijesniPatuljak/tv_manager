@@ -15,6 +15,8 @@
             this.dbContext = dbContext;
         }
 
+
+
         public void DeleteAd(Ad ad)
         {
             this.dbContext.Remove(ad);
@@ -33,6 +35,14 @@
         {
             this.dbContext.Ads.Add(ad);
             this.dbContext.SaveChanges();
+        }
+
+        public void UpdateAd(Ad old, Ad new_ad)
+        {
+            this.DeleteAd(old);
+            this.SaveAd(new_ad);
+            this.dbContext.SaveChanges();
+
         }
     }
 }

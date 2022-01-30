@@ -22,6 +22,8 @@ namespace TvManager.View.View
         public List<Show> final_shows = new List<Show>();
         public List<Ad> final_ads = new List<Ad>();
 
+        public List<Show> preffered_shows = new List<Show>();
+        public List<Ad> preffered_ads = new List<Ad>();
 
         bool zastava = false;
 
@@ -32,6 +34,9 @@ namespace TvManager.View.View
             this.adService = adService;
             InitializeComponent();
 
+            preffered_shows = new List<Show> (showService.GetAllShows().ToList());
+            preffered_ads = new List<Ad> (adService.GetAds().ToList());    
+
             FillListBox();
 
 
@@ -39,20 +44,19 @@ namespace TvManager.View.View
 
         private void FillListBox()
         {
-            //MainShows.Items.Clear();
-            //MainAds.Items.Clear();
-            //MainSchedule.Items.Clear();
+            
             result_table.Rows.Clear();
             show_table.Rows.Clear();
             table_ads.Rows.Clear();
 
+            preffered_shows = showService.GetAllShows().ToList();
+            preffered_ads = adService.GetAds().ToList();
 
-            var shows = showService.GetAllShows();
 
-            foreach (var item in shows)
+
+            foreach (var item in preffered_shows)
             {
-                //MainShows.Items.Add(item.Name + " " + item.StartTime + " " + item.Duration + " P:" + item.Priority);
-
+                
                 string[] row = { 
                     item.Name, 
                     item.StartTime.ToString(), 
@@ -65,11 +69,10 @@ namespace TvManager.View.View
 
             }
 
-            var ads = adService.GetAds();
+            
 
-            foreach (var item in ads)
+            foreach (var item in preffered_ads)
             {
-                //MainAds.Items.Add(item.Name + " " + item.StartTime + " " + item.Duration + " P:" + item.Priority);
                 string[] row = { 
                     item.Name, 
                     item.StartTime.ToString(), 
@@ -104,7 +107,7 @@ namespace TvManager.View.View
                     ad.Priority.ToString()};
 
                 result_table.Rows.Add(row);
-                //MainSchedule.Items.Add(ad.StartTime.ToString() + " " + ad.Duration.ToString() + " AD " + ad.Name + " P:" + ad.Priority);
+               
             }
 
             result_table.Sort(result_table.Columns["ResultStartTime"], ListSortDirection.Ascending);
@@ -165,20 +168,8 @@ namespace TvManager.View.View
             FillListBox();
         }
 
-        private void MainShows_DoubleClick(object sender, EventArgs e)
-        {
-            EditShow form = new EditShow(this.showService, this.adService);
-            form.ShowDialog();
 
-
-        }
-
-        private void MainAds_DoubleClick(object sender, EventArgs e)
-        {
-            EditAd form = new EditAd(this.showService, this.adService);
-            form.ShowDialog();
-        }
-
+      
 
         private void MainSchedule_DoubleClick(object sender, EventArgs e)
         {
@@ -304,6 +295,33 @@ namespace TvManager.View.View
             this.DialogResult = DialogResult.OK;
             this.Close();
             
+        }
+
+        private void editAdRow(object sender, DataGridViewCellEventArgs e)
+        {
+
+
+            var ind = table_ads.SelectedRows[0].Index;
+
+            EditAd form = new EditAd(this.showService, this.adService, ind);
+
+
+
+            form.ShowDialog();
+
+            FillListBox();
+        }
+
+        private void editShowRow(object sender, DataGridViewCellEventArgs e)
+        {
+            var ind = show_table.SelectedRows[0].Index;
+
+            EditShow form = new EditShow(this.showService, this.adService, ind);
+
+
+            form.ShowDialog();
+
+            FillListBox();
         }
     }
 }

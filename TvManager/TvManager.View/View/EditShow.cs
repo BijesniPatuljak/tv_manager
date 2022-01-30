@@ -19,20 +19,46 @@ namespace TvManager.View.View
     {
         private IShowService showService;
         private IAdService adService;
+        private int index;
+        private Show old_show;
 
-        private Show currentShow;
+        private List<RadioButton> radioButtons = new List<RadioButton>();
 
-        public EditShow(IShowService showService, IAdService adService, Show show = null )
+
+        public EditShow(IShowService showService, IAdService adService, int index = -1 )
         {
+            this.index = index;
             this.showService = showService;
             this.adService = adService;
             InitializeComponent();
 
-            currentShow = new Show();
+            radioButtons.Add(radio9);
+            radioButtons.Add(radio8);
+            radioButtons.Add(radio7);
+            radioButtons.Add(radio6);
+            radioButtons.Add(radio5);
+            radioButtons.Add(radio4);
+            radioButtons.Add(radio3);
 
-            if ( show != null)
+            textBox_id.ReadOnly = true;
+
+
+
+            if (index != -1)
             {
-                FillForm(show);
+                old_show = showService.GetAllShows().ToList()[index];
+
+                textBox_id.Text = old_show.Id.ToString();
+                textBox_name.Text = old_show.Name.ToString();
+                textBox_duration.Text = old_show.Duration.ToString();
+                textBox_timeslot.Text = old_show.StartTime.ToString();
+
+                radioButtons[9 - old_show.Priority].Checked = true;
+
+            }
+            else
+            {
+                textBox_id.Text = Guid.NewGuid().ToString();
             }
         }
         private void FillForm(Show show)
@@ -54,19 +80,28 @@ namespace TvManager.View.View
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-            currentShow.Id = Guid.Parse(textBox_id.Text);
-            currentShow.StartTime = TimeSpan.Parse(textBox_timeslot.Text);
-            currentShow.Name = textBox_name.Text;
-            currentShow.Duration = TimeSpan.Parse(textBox_duration.Text);
+            var new_show = new Show();
+            new_show.Id = Guid.Parse(textBox_id.Text);
+            new_show.StartTime = TimeSpan.Parse(textBox_timeslot.Text);
+            new_show.Name = textBox_name.Text;
+            new_show.Duration = TimeSpan.Parse(textBox_duration.Text);
 
             var checkedButton = priorities.Controls.OfType<RadioButton>()
                                       .FirstOrDefault(r => r.Checked).Text;
 
-            currentShow.Priority = Int32.Parse(checkedButton.ToString());
+            new_show.Priority = Int32.Parse(checkedButton.ToString());
 
 
-            showService.SaveShow(currentShow);
+            if(index == -1)
+            {
+                showService.SaveShow(new_show);
+            }
+            else
+            {
+                showService.UpdateShow(old_show,new_show);
+            }
+
+            Close();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -75,6 +110,16 @@ namespace TvManager.View.View
         }
 
         private void textBox_duration_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void priorities_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
 
         }

@@ -9,6 +9,8 @@
 
         void DeleteAd(Ad ad);
 
+        void UpdateAd(Ad old,Ad new_ad);
+
         void DeleteAllAds();
 
         IEnumerable<Ad> GetAds();

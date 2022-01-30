@@ -34,6 +34,12 @@
         {
             this.dbContext.Add(show);
             this.dbContext.SaveChanges();
-        } 
+        }
+
+        public void UpdateShow(Show old, Show new_show)
+        {
+            this.DeleteShow(old);
+            this.SaveShow(new_show);
+        }
     }
 }

@@ -71,19 +71,16 @@
             // 
             this.ResultName.HeaderText = "Name";
             this.ResultName.Name = "ResultName";
-            this.ResultName.ReadOnly = true;
             // 
             // ResultStartTime
             // 
             this.ResultStartTime.HeaderText = "Start Time";
             this.ResultStartTime.Name = "ResultStartTime";
-            this.ResultStartTime.ReadOnly = true;
             // 
             // ResultDuration
             // 
             this.ResultDuration.HeaderText = "Duration";
             this.ResultDuration.Name = "ResultDuration";
-            this.ResultDuration.ReadOnly = true;
             // 
             // ViewSchedule
             // 

@@ -30,7 +30,69 @@ namespace TvManager.View.View
         public List<Ad> final_ads = new List<Ad>();
 
 
+        public ViewSchedule(IShowService showService, IAdService adService)
+        {
 
+            this.showService = showService;
+            this.adService = adService;
+            InitializeComponent();
+
+
+            var all_shows = showService.GetAllShows().ToList();
+            var all_ads = adService.GetAds().ToList();
+
+            for (int p = 10; p >= 2; p--)
+            {
+
+                var currentShows = GetAndRemoveShowsOfPriority(p, ref all_shows);
+
+                CrossCheckShows(currentShows, ref final_shows);
+
+                all_shows.RemoveAll(i => currentShows.Contains(i));
+            }
+
+
+
+            for (int p = 10; p >= 2; p--)
+            {
+                Debug.WriteLine("P = " + p);
+
+                var currentAds = GetAndRemoveAdsOfPriority(p, ref all_ads);
+
+                CrossCheckAds(currentAds, ref final_ads, ref final_shows);
+
+                all_ads.RemoveAll(i => currentAds.Contains(i));
+
+
+            }
+
+            //Sortira listu prema planiranom vremenu pocetka
+
+
+            foreach (var show in final_shows)
+            {
+                string[] row = {
+                    show.Name,
+                    show.StartTime.ToString(),
+                    show.Duration.ToString() };
+
+
+                result_table.Rows.Add(row);
+            }
+            foreach (var ad in final_ads)
+            {
+                string[] row = {
+                    ad.Name,
+                    ad.StartTime.ToString(),
+                    ad.Duration.ToString() };
+
+                result_table.Rows.Add(row);
+            }
+
+            result_table.Sort(result_table.Columns["ResultStartTime"], ListSortDirection.Ascending);
+
+
+        }
 
 
         private TimeSpan FindFreeTimeSpan(
@@ -199,8 +261,7 @@ namespace TvManager.View.View
                     (show1_start + show1_duration == show2_start + show2_duration);
                     
 
-            //Debug.WriteLine("           comparing: [" + show1_start + ", " + show1_duration + "], [ " + show2_start + ", " + show2_duration + "] = " + rez);
-
+        
             return rez;
         }
 
@@ -214,8 +275,14 @@ namespace TvManager.View.View
 
             while(showsPriorityP.Count > 0)
             {
-                var new_show = showsPriorityP.First();
+               
 
+                var new_show = new Show();
+                new_show.Priority = showsPriorityP.First().Priority;
+                new_show.Name = showsPriorityP.First().Name;
+                new_show.Duration = showsPriorityP.First().Duration;
+                new_show.StartTime = showsPriorityP.First().StartTime;
+                new_show.Id = showsPriorityP.First().Id;
 
                 var collidedShows = from fin in final
                                     where 
@@ -286,78 +353,7 @@ namespace TvManager.View.View
 
 
 
-        public ViewSchedule(IShowService showService, IAdService adService)
-        {
-
-            this.showService = showService;
-            this.adService = adService;
-            InitializeComponent();
-
-
-            //     ad: Dnevnik_ad_2 19:58:00 00:02:00
-            //col: False
-            // found new timespan: 19:59:00
-            //Adding Dnevink_ad_3 at 19:59:00 00:01:00
-
-
-
-            var all_shows = showService.GetAllShows().ToList();
-            var all_ads = adService.GetAds().ToList();
-
-            
-
-            for (int p = 10; p >= 2; p--)
-            {
-              
-                var currentShows = GetAndRemoveShowsOfPriority(p, ref all_shows);
-
-                CrossCheckShows(currentShows, ref final_shows);
-
-                all_shows.RemoveAll(i => currentShows.Contains(i));  
-            }
-
-
-
-            for (int p = 10; p >= 2; p--)
-            {
-                Debug.WriteLine("P = " + p);
-
-                var currentAds = GetAndRemoveAdsOfPriority(p, ref all_ads);
-
-                CrossCheckAds(currentAds, ref final_ads,ref final_shows);
-
-                all_ads.RemoveAll(i => currentAds.Contains(i));
-
-
-            }
-
-                //Sortira listu prema planiranom vremenu pocetka
-
-
-            foreach (var show in final_shows)
-            {
-                string[] row = {
-                    show.Name,
-                    show.StartTime.ToString(),
-                    show.Duration.ToString() };
-
-
-                result_table.Rows.Add(row);
-            }
-            foreach (var ad in final_ads)
-            {
-                string[] row = {
-                    ad.Name,
-                    ad.StartTime.ToString(),
-                    ad.Duration.ToString() };
-
-                result_table.Rows.Add(row);
-            }
-
-            result_table.Sort(result_table.Columns["ResultStartTime"], ListSortDirection.Ascending);
-
-
-        }
+        
 
 
 
