@@ -21,26 +21,6 @@ namespace TvManager.View.View
 
     public partial class ViewSchedule : Form
     {
-        struct ScheduleItem_show
-        {
-            public Show show;
-            public TimeSpan max_offset;
-            public TimeSpan curr_offset;
-
-            public TimeSpan ad_offset;
-            public TimeSpan max_ad_offset;
-
-            public bool fixed_time;
-        };
-
-        struct ScheduleItem_Ad
-        {
-            public Ad ad;
-            public TimeSpan max_offset;
-            public TimeSpan curr_offset;
-            public bool fixed_time;
-        };
-
 
         private IShowService showService;
         private IAdService adService;
@@ -51,26 +31,37 @@ namespace TvManager.View.View
 
 
         private TimeSpan FindFreeTimeSpan(
-            ref List<ScheduleItem_show> final,
+            ref List<Show> final,
             TimeSpan preffered,
-            TimeSpan duration
+            TimeSpan duration,
+            bool searchForAd =false
             )
         {
             TimeSpan newTimeSpan;
 
-            for (int i = 5; i < 1000; i+=5)
+            int step = searchForAd ? 1 : 5;
+
+
+            for (int i = 5; i < 1000; i += step)
             {
                 newTimeSpan = preffered + TimeSpan.FromMinutes(i);
 
                 var collidedShows = from fin in final
-                                    where (newTimeSpan < fin.show.StartTime &&
-                                   newTimeSpan + duration > fin.show.StartTime) ||
-                                   (newTimeSpan < fin.show.StartTime + fin.show.Duration &&
-                                   newTimeSpan + duration > fin.show.StartTime + fin.show.Duration)
+                                    where check_collision(
+                                        newTimeSpan,
+                                        duration,
+                                        fin.StartTime,
+                                        fin.Duration)
                                     select fin;
                 if (collidedShows.Count() == 0)
                 {
-                    Debug.WriteLine(i +" " + newTimeSpan.ToString()+" " + duration.ToString());
+                    Debug.WriteLine(i + " " + newTimeSpan.ToString() + " " + duration.ToString());
+
+                    foreach (var show in final)
+                    {
+                        Debug.WriteLine("w           " + show.Name  + show.StartTime);
+                    }
+
                     return newTimeSpan;
                 }
 
@@ -90,12 +81,97 @@ namespace TvManager.View.View
 
 
             }
-            return new TimeSpan(0,0,0);
+            return new TimeSpan(0, 0, 0);
         }
 
-        private void CrossCheckShows2(
-            List<ScheduleItem_show> showsPriorityP,
-            ref List<ScheduleItem_show> final
+
+        private void CrossCheckAds(
+            List<Ad> adsPriorityP,
+            ref List<Ad> final,
+            ref List<Show> final_shows
+            )
+        {
+            while (adsPriorityP.Count > 0)
+            {
+                var new_ad = adsPriorityP.First();
+
+
+                var collidedAds = from fin in final
+                                    where
+                                    check_collision(
+                                        new_ad.StartTime,
+                                        new_ad.Duration,
+                                        fin.StartTime,
+                                        fin.Duration)
+                                    select fin;
+
+                var collidedAds2 = from fin in final_shows
+                                   where
+                                  check_collision(
+                                      new_ad.StartTime,
+                                      new_ad.Duration,
+                                      fin.StartTime,
+                                      fin.Duration)
+                                  select fin;
+
+
+
+                if (collidedAds.Any() || collidedAds2.Any())
+                {
+                    Debug.WriteLine("collidedShows for " + new_ad.Name + ":" + collidedAds.Count());
+
+                    TimeSpan newTimeSpan = FindFreeTimeSpan(ref final_shows, new_ad.StartTime, new_ad.Duration,true);
+
+                    Debug.WriteLine("found new timespan: " + newTimeSpan.ToString());
+
+                    new_ad.StartTime = newTimeSpan;
+
+                    final.Add(new_ad);
+
+                }
+                else
+                {
+                    Debug.WriteLine("NO collidedShows for" + new_ad.Name);
+                    Debug.WriteLine("Adding " + new_ad.Name);
+                    
+
+
+                    final.Add(new_ad);
+
+                    foreach (var item in final)
+                    {
+                        Debug.WriteLine(item.Name);
+                    }
+
+
+                }
+
+                adsPriorityP.RemoveAt(0);
+            }
+        }
+
+        private bool check_collision(
+            TimeSpan show1_start,
+            TimeSpan show1_duration,
+            TimeSpan show2_start,
+            TimeSpan show2_duration)
+        {
+            //Debug.WriteLine("comparing: [" + show1_start + ", " + show1_duration + "], [ " + show2_start + ", " + show2_duration + "]");
+            return (show1_start <= show2_start &&
+                    show1_start + show1_duration >= show2_start) ||
+                    (show1_start <= show2_start + show2_duration &&
+                    show1_start + show1_duration >= show2_start + show2_duration) ||
+                    (show1_start >= show2_start &&
+                    show1_start + show1_duration <= show2_start + show2_duration) ||
+                    (show2_start >= show1_start &&
+                    show2_start + show2_duration <= show1_start + show1_duration);
+        }
+
+
+
+        private void CrossCheckShows(
+            List<Show> showsPriorityP,
+            ref List<Show> final
             )
         {
 
@@ -105,34 +181,36 @@ namespace TvManager.View.View
 
 
                 var collidedShows = from fin in final
-                                    where (new_show.show.StartTime <= fin.show.StartTime &&
-                                   new_show.show.StartTime + new_show.show.Duration >= fin.show.StartTime ) ||
-                                   (new_show.show.StartTime <= fin.show.StartTime + fin.show.Duration &&
-                                   new_show.show.StartTime + new_show.show.Duration >= fin.show.StartTime + fin.show.Duration)
+                                    where 
+                                    check_collision(
+                                        new_show.StartTime,
+                                        new_show.Duration, 
+                                        fin.StartTime, 
+                                        fin.Duration)
                                     select fin;
 
                 if (collidedShows.Any())
                 {
-                    Debug.WriteLine("collidedShows for" + new_show.show.Name + ":" + collidedShows.Count());
+                    Debug.WriteLine("collidedShows for" + new_show.Name + ":" + collidedShows.Count());
 
-                    TimeSpan newTimeSpan = FindFreeTimeSpan(ref final, new_show.show.StartTime, new_show.show.Duration);
+                    TimeSpan newTimeSpan = FindFreeTimeSpan(ref final, new_show.StartTime, new_show.Duration);
 
                     Debug.WriteLine("found new timespan:" + newTimeSpan.ToString());
 
-                    new_show.show.StartTime = newTimeSpan;
+                    new_show.StartTime = newTimeSpan + TimeSpan.FromMinutes(5);
 
                     final.Add(new_show);
 
                 }
                 else
                 {
-                    Debug.WriteLine("NO collidedShows for" + new_show.show.Name + ":" + collidedShows.Count());
-                    Debug.WriteLine("Adding " + new_show.show.Name);
+                    Debug.WriteLine("NO collidedShows for" + new_show.Name + ":" + collidedShows.Count());
+                    Debug.WriteLine("Adding " + new_show.Name);
                     final.Add(new_show);
 
                     foreach (var item in final)
                     {
-                        Debug.WriteLine(item.show.Name);
+                        Debug.WriteLine(item.Name);
                     }
 
                     
@@ -141,83 +219,30 @@ namespace TvManager.View.View
                 showsPriorityP.RemoveAt(0);
             }
 
-
-
-
         }
 
-        private List<ScheduleItem_show> CrossCheckShows(
-            List<ScheduleItem_show> shows,
-            List<ScheduleItem_show> final)
+
+
+        private List<Ad> GetAndRemoveAdsOfPriority(int p, ref List<Ad> all_ads)
         {
+            var adsOfPriority =
+                from ad in all_ads
+                where ad.Priority == p
+                select ad;
 
-            if (final.Count > 0)
-            {
+            var list = adsOfPriority.ToList();
 
-                // if show fits perfectly in the schedule without additional movements
-                var perfectShows = from show in shows
-                                   from fin in final
-                                   where (show.show.StartTime + show.show.Duration <= fin.show.StartTime ||
-                                   show.show.StartTime  > fin.show.StartTime + fin.show.Duration)
-                                   select show;
+            all_ads.RemoveAll(i => list.Contains(i));
 
-
-
-                Debug.WriteLine("           perfectShows:" + perfectShows.Count());
-
-                //If show is crossing some show in final,but crossing it by just a little (< offset) ,then its valid
-                var validShows = from show in shows
-                                 from fin in final
-                                 where (show.show.StartTime < fin.show.StartTime &&
-                                   show.show.StartTime + show.show.Duration > fin.show.StartTime &&
-                                   show.show.StartTime + show.show.Duration - fin.show.StartTime <= show.max_offset) ||
-                                   (show.show.StartTime < fin.show.StartTime + fin.show.Duration &&
-                                   show.show.StartTime + show.show.Duration > fin.show.StartTime + fin.show.Duration &&
-                                   fin.show.StartTime + fin.show.Duration - fin.show.Duration <= show.max_offset)
-                                 select show;
-
-                Debug.WriteLine("           validShows:" + validShows.Count());
-
-                return validShows.ToList().Concat(perfectShows.ToList()).ToList();
-
-            }
-
-            return shows;
-
+            return list;
         }
 
-        /*
-         Function removes some_shows from all_shows (all_shows = shows left to add to schedule),
-            and also puts them in final_shows
-         
-        
-         */
-        private void ConfirmAndRemoveShows(
-            ref List<ScheduleItem_show> all_shows,
-            List<ScheduleItem_show> some_shows, 
-            ref List<ScheduleItem_show> final)
-        {
-            foreach (var show in some_shows)
-            {
-                
-                final.Add(show);
-            }
-
-            all_shows.RemoveAll(i => some_shows.Contains(i));
-        }
-
-
-        
-
-
-
-
-        private List<ScheduleItem_show> GetAndRemoveShowsOfPriority(int priority, ref List<ScheduleItem_show> shows)
+        private List<Show> GetAndRemoveShowsOfPriority(int priority, ref List<Show> shows)
         {
 
             var showsOfPriority =
                 from show in shows
-                where show.show.Priority == priority
+                where show.Priority == priority
                 select show;
 
 
@@ -229,63 +254,6 @@ namespace TvManager.View.View
         }
 
 
-        private List<ScheduleItem_show> GetShowsWrapper()
-        {
-
-            string[] maxTimeSpans = { 
-                "04:00:00", "04:00:00", 
-                "04:00:00", "04:00:00",
-                "04:00:00", "04:00:00", 
-                "04:00:00", "02:00:00", 
-                "00:30:00", "00:10:00" };
-            string[] maxAdTimeSpans = {
-                "01:00:00", "01:00:00",
-                "01:00:00", "01:00:00",
-                "01:00:00", "01:00:00",
-                "01:00:00", "00:15:00",
-                "00:05:00", "00:00:20" };
-
-
-            var shows = showService.GetAllShows().ToList();
-
-
-            //prema unosu u MainMenu, postavlja se ekstra veliki prioritet (10) na odabrane showove
-
-            foreach (var item in shows)
-            {
-
-                if (obavezne.Contains(item.Name)) item.Priority = 10;
-                
-            }
-
-
-
-            var schedule_show = new List<ScheduleItem_show>();
-            foreach (var show in shows)
-            {
-
-                if (show.Duration == TimeSpan.FromHours(0))
-                {
-                    show.Duration = new TimeSpan(2, 0, 0);
-                }
-
-
-                ScheduleItem_show temp = new ScheduleItem_show();
-                temp.show = show;
-                temp.curr_offset = new TimeSpan();
-                temp.ad_offset = new TimeSpan();
-                temp.max_offset = TimeSpan.Parse(maxTimeSpans[show.Priority]);
-                temp.max_ad_offset = TimeSpan.Parse(maxAdTimeSpans[show.Priority]);
-                temp.fixed_time = show.Priority == 9? true:false; //mozes li tu provjeriti i za prioritet 10?
-
-                schedule_show.Add(temp);
-            }
-
-            return schedule_show;
-        }
-
-        //private List<ScheduleItem_Ad> GetAdsWrapper()
-        
 
         public ViewSchedule(IShowService showService, IAdService adService)
         {
@@ -296,12 +264,13 @@ namespace TvManager.View.View
 
  
             //var schedule_ads = new List<ScheduleItem_Ad>();
-            var all_shows = GetShowsWrapper();
+            var all_shows = showService.GetAllShows().ToList();
+            var all_ads = adService.GetAds().ToList();
 
-            var final_shows = new List <ScheduleItem_show>();
+            var final_shows = new List <Show>();
+            var final_ads = new List<Ad>();
 
-
-            for(int p = 10; p >= 8; p--)
+            for (int p = 10; p >= 6; p--)
             {
                 Debug.WriteLine("P = " + p);
 
@@ -314,43 +283,50 @@ namespace TvManager.View.View
 
                 foreach(var currentShow in currentShows)
                 {
-                    Debug.WriteLine("           " + currentShow.show.Name);
+                    Debug.WriteLine("           " + currentShow.Name);
                 }
 
-                //ADD DELEGATION TO SMALLER PRIORITY IF NOT VALID
-
-
+               
                 //var valid = CrossCheckShows(currentShows, final_shows);
 
-                CrossCheckShows2(currentShows, ref final_shows);
+                CrossCheckShows(currentShows, ref final_shows);
 
-
-
-               // Debug.WriteLine("       valid:" + valid.Count);
-
-                //foreach (var currentShow in valid)
-                //{
-                //    Debug.WriteLine("           " + currentShow.show.Name);
-                //}
-
-                all_shows.RemoveAll(i => currentShows.Contains(i));
-
-                //ConfirmAndRemoveShows(ref all_shows, valid, ref final_shows);
-
-                
+                all_shows.RemoveAll(i => currentShows.Contains(i));  
 
             }
 
-            //Sortira listu prema planiranom vremenu pocetka
 
-            final_shows.Sort((s1, s2) => s1.show.StartTime.CompareTo(s2.show.StartTime));
+
+            for (int p = 10; p >= 8; p--)
+            {
+                Debug.WriteLine("P = " + p);
+
+                var currentAds = GetAndRemoveAdsOfPriority(p, ref all_ads);
+
+
+                CrossCheckAds(currentAds, ref final_ads,ref final_shows);
+
+                all_ads.RemoveAll(i => currentAds.Contains(i));
+
+
+            }
+
+                //Sortira listu prema planiranom vremenu pocetka
+
+               
 
 
 
             foreach (var show in final_shows)
             {
-                listBox1.Items.Add(show.show.StartTime.ToString() + " " +show.show.Duration.ToString() + "  " + show.show.Name + " P:" + show.show.Priority);
+                listBox1.Items.Add(show.StartTime.ToString() + " " +show.Duration.ToString() + "  " + show.Name + " P:" + show.Priority);
             }
+            foreach (var ad in final_ads)
+            {
+                listBox1.Items.Add(ad.StartTime.ToString() + " " + ad.Duration.ToString() + " AD " + ad.Name + " P:" + ad.Priority);
+            }
+
+            listBox1.Sorted = true;
 
 
         }

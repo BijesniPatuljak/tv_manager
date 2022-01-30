@@ -47,6 +47,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.ad_start = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -181,7 +183,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(237, 91);
+            this.label2.Location = new System.Drawing.Point(237, 112);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 15);
             this.label2.TabIndex = 12;
@@ -190,7 +192,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(317, 88);
+            this.textBox2.Location = new System.Drawing.Point(317, 109);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 23);
             this.textBox2.TabIndex = 13;
@@ -230,11 +232,30 @@
             this.label3.TabIndex = 14;
             this.label3.Text = "Ad cost";
             // 
+            // ad_start
+            // 
+            this.ad_start.Location = new System.Drawing.Point(317, 84);
+            this.ad_start.Name = "ad_start";
+            this.ad_start.Size = new System.Drawing.Size(100, 23);
+            this.ad_start.TabIndex = 19;
+            this.ad_start.TextChanged += new System.EventHandler(this.ad_start_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(237, 87);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(48, 15);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "Ad start";
+            // 
             // EditAd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(440, 254);
+            this.Controls.Add(this.ad_start);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBox3);
@@ -274,5 +295,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox ad_start;
+        private System.Windows.Forms.Label label5;
     }
 }

@@ -41,6 +41,7 @@ namespace TvManager.View.View
             ad.Name = textBox1.Text;
             ad.Priority = Int32.Parse(checkedButton);
             ad.Duration = TimeSpan.Parse(textBox2.Text);
+            ad.StartTime = TimeSpan.Parse(ad_start.Text);
             ad.Cost = decimal.Parse(textBox3.Text);
 
             adService.SaveAd(ad);
@@ -84,6 +85,11 @@ namespace TvManager.View.View
         }
 
         private void EditAd_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ad_start_TextChanged(object sender, EventArgs e)
         {
 
         }

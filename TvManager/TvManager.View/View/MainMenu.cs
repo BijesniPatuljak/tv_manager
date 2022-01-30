@@ -44,7 +44,7 @@ namespace TvManager.View.View
 
             foreach (var item in ads)
             {
-                MainAds.Items.Add(item.Name);
+                MainAds.Items.Add(item.Name + " " + item.StartTime + " " + item.Duration + " P:" + item.Priority);
             }
 
 
