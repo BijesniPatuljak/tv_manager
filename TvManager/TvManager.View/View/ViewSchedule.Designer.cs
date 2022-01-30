@@ -65,6 +65,7 @@
             this.result_table.RowTemplate.Height = 25;
             this.result_table.Size = new System.Drawing.Size(695, 411);
             this.result_table.TabIndex = 15;
+            this.result_table.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.result_table_CellContentClick);
             // 
             // ResultName
             // 

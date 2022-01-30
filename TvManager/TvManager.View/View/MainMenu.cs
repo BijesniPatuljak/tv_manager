@@ -53,7 +53,11 @@ namespace TvManager.View.View
             {
                 //MainShows.Items.Add(item.Name + " " + item.StartTime + " " + item.Duration + " P:" + item.Priority);
 
-                string[] row = { item.Name, item.StartTime.ToString(), item.Duration.ToString() };
+                string[] row = { 
+                    item.Name, 
+                    item.StartTime.ToString(), 
+                    item.Duration.ToString(),
+                    item.Priority.ToString()};
 
                 show_table.Rows.Add(row);
 
@@ -66,7 +70,11 @@ namespace TvManager.View.View
             foreach (var item in ads)
             {
                 //MainAds.Items.Add(item.Name + " " + item.StartTime + " " + item.Duration + " P:" + item.Priority);
-                string[] row = { item.Name, item.StartTime.ToString(), item.Duration.ToString() };
+                string[] row = { 
+                    item.Name, 
+                    item.StartTime.ToString(), 
+                    item.Duration.ToString(),
+                    item.Priority.ToString()};
 
                 table_ads.Rows.Add(row);
 
@@ -80,7 +88,8 @@ namespace TvManager.View.View
                 string[] row = {
                     show.Name,
                     show.StartTime.ToString(),
-                    show.Duration.ToString() };
+                    show.Duration.ToString(),
+                    show.Priority.ToString()};
 
 
                 result_table.Rows.Add(row);
@@ -91,7 +100,8 @@ namespace TvManager.View.View
                 string[] row = {
                     ad.Name,
                     ad.StartTime.ToString(),
-                    ad.Duration.ToString() };
+                    ad.Duration.ToString(),
+                    ad.Priority.ToString()};
 
                 result_table.Rows.Add(row);
                 //MainSchedule.Items.Add(ad.StartTime.ToString() + " " + ad.Duration.ToString() + " AD " + ad.Name + " P:" + ad.Priority);

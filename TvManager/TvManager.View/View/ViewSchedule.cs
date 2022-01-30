@@ -395,5 +395,10 @@ namespace TvManager.View.View
                 this.DialogResult = DialogResult.OK;
             this.Close();
         }
+
+        private void result_table_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
