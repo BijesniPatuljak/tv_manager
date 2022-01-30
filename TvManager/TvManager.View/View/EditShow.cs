@@ -58,6 +58,7 @@ namespace TvManager.View.View
             currentShow.Id = Guid.Parse(textBox_id.Text);
             currentShow.StartTime = TimeSpan.Parse(textBox_timeslot.Text);
             currentShow.Name = textBox_name.Text;
+            currentShow.Duration = TimeSpan.Parse(textBox_duration.Text);
 
             var checkedButton = priorities.Controls.OfType<RadioButton>()
                                       .FirstOrDefault(r => r.Checked).Text;
@@ -71,6 +72,11 @@ namespace TvManager.View.View
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             textBox_id.Text = Guid.NewGuid().ToString();
+        }
+
+        private void textBox_duration_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

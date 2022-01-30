@@ -44,6 +44,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.textBox_duration = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.priorities.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -209,11 +211,30 @@
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
+            // textBox_duration
+            // 
+            this.textBox_duration.Location = new System.Drawing.Point(324, 160);
+            this.textBox_duration.Name = "textBox_duration";
+            this.textBox_duration.Size = new System.Drawing.Size(100, 23);
+            this.textBox_duration.TabIndex = 29;
+            this.textBox_duration.TextChanged += new System.EventHandler(this.textBox_duration_TextChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(244, 166);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 15);
+            this.label3.TabIndex = 30;
+            this.label3.Text = "Duration";
+            // 
             // EditShow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(510, 265);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.textBox_duration);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.textBox_id);
             this.Controls.Add(this.label4);
@@ -251,5 +272,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.TextBox textBox_duration;
+        private System.Windows.Forms.Label label3;
     }
 }

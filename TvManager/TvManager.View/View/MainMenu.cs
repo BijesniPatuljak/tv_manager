@@ -17,7 +17,7 @@ namespace TvManager.View.View
         private IAdService adService;
         public object lb_item = null;
 
-        private static List<object> Emisije_i_Reklame = null;
+        private static List<object> Emisije_i_Reklame = new List<object>();
 
         public static List<object> emisije_i_reklame
         {
@@ -37,7 +37,7 @@ namespace TvManager.View.View
 
             foreach (var item in shows)
             {
-                MainShows.Items.Add(item.Name);
+                MainShows.Items.Add(item.Name + " " + item.StartTime + " " + item.Duration + " P:" + item.Priority);
             }
 
             var ads = adService.GetAds();
@@ -75,13 +75,13 @@ namespace TvManager.View.View
 
         private void buttonAddAd_Click(object sender, EventArgs e)
         {
-            ViewAds form = new ViewAds(this.showService, this.adService);
+            EditAd form = new EditAd(this.showService, this.adService);
             form.ShowDialog();
         }
 
         private void buttonAddShow_Click(object sender, EventArgs e)
         {
-            ViewShows form = new ViewShows(this.showService, this.adService);
+            EditShow form = new EditShow(this.showService, this.adService);
             form.ShowDialog();
         }
 
@@ -142,6 +142,25 @@ namespace TvManager.View.View
         private void HardEdit_Click(object sender, EventArgs e)
         {
             //Hard Edit
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string text = MainAds.GetItemText(MainAds.SelectedItem);
+
+
+
+
+        }
+
+        private void MainAds_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

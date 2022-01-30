@@ -37,6 +37,8 @@
             this.MainShows = new System.Windows.Forms.ListBox();
             this.MainSchedule = new System.Windows.Forms.ListBox();
             this.HardEdit = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonViewAds
@@ -97,6 +99,7 @@
             this.MainAds.Name = "MainAds";
             this.MainAds.Size = new System.Drawing.Size(261, 94);
             this.MainAds.TabIndex = 5;
+            this.MainAds.SelectedIndexChanged += new System.EventHandler(this.MainAds_SelectedIndexChanged);
             this.MainAds.DoubleClick += new System.EventHandler(this.MainAds_DoubleClick);
             // 
             // MainShows
@@ -132,11 +135,33 @@
             this.HardEdit.UseVisualStyleBackColor = true;
             this.HardEdit.Click += new System.EventHandler(this.HardEdit_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(101, 125);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 9;
+            this.button1.Text = "Delete Ad";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(101, 154);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(100, 23);
+            this.button2.TabIndex = 10;
+            this.button2.Text = "Delete All Ads";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(649, 408);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.HardEdit);
             this.Controls.Add(this.MainSchedule);
             this.Controls.Add(this.MainShows);
@@ -164,5 +189,7 @@
         private System.Windows.Forms.ListBox MainShows;
         private System.Windows.Forms.ListBox MainSchedule;
         private System.Windows.Forms.Button HardEdit;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }

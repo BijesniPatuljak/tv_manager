@@ -34,11 +34,12 @@ namespace TvManager.View.View
         {
             var checkedButton = groupBox1.Controls.OfType<RadioButton>()
                                       .FirstOrDefault(r => r.Checked).Text;
-            textBox1.Text = checkedButton.ToString();
+            
 
             Ad ad = new Ad();
             ad.Id = Guid.NewGuid();
             ad.Name = textBox1.Text;
+            ad.Priority = Int32.Parse(checkedButton);
             ad.Duration = TimeSpan.Parse(textBox2.Text);
             ad.Cost = decimal.Parse(textBox3.Text);
 

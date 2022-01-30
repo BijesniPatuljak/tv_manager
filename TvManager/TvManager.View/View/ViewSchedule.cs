@@ -48,6 +48,104 @@ namespace TvManager.View.View
 
         List<object>? obavezne = MainMenu.emisije_i_reklame;
 
+
+
+        private TimeSpan FindFreeTimeSpan(
+            ref List<ScheduleItem_show> final,
+            TimeSpan preffered,
+            TimeSpan duration
+            )
+        {
+            TimeSpan newTimeSpan;
+
+            for (int i = 5; i < 1000; i+=5)
+            {
+                newTimeSpan = preffered + TimeSpan.FromMinutes(i);
+
+                var collidedShows = from fin in final
+                                    where (newTimeSpan < fin.show.StartTime &&
+                                   newTimeSpan + duration > fin.show.StartTime) ||
+                                   (newTimeSpan < fin.show.StartTime + fin.show.Duration &&
+                                   newTimeSpan + duration > fin.show.StartTime + fin.show.Duration)
+                                    select fin;
+                if (collidedShows.Count() == 0)
+                {
+                    Debug.WriteLine(i +" " + newTimeSpan.ToString()+" " + duration.ToString());
+                    return newTimeSpan;
+                }
+
+                //newTimeSpan = preffered - TimeSpan.FromMinutes(i);
+
+                //var collidedShows2 = from fin in final
+                //                    where (newTimeSpan < fin.show.StartTime &&
+                //                   newTimeSpan + duration > fin.show.StartTime) ||
+                //                   (newTimeSpan < fin.show.StartTime + fin.show.Duration &&
+                //                   newTimeSpan + duration > fin.show.StartTime + fin.show.Duration)
+                //                    select fin;
+                //if (collidedShows2.Count() == 0)
+                //{
+                //    Debug.WriteLine(i + " " + newTimeSpan.ToString() + " " + duration.ToString());
+                //    return newTimeSpan;
+                //}
+
+
+            }
+            return new TimeSpan(0,0,0);
+        }
+
+        private void CrossCheckShows2(
+            List<ScheduleItem_show> showsPriorityP,
+            ref List<ScheduleItem_show> final
+            )
+        {
+
+            while(showsPriorityP.Count > 0)
+            {
+                var new_show = showsPriorityP.First();
+
+
+                var collidedShows = from fin in final
+                                    where (new_show.show.StartTime <= fin.show.StartTime &&
+                                   new_show.show.StartTime + new_show.show.Duration >= fin.show.StartTime ) ||
+                                   (new_show.show.StartTime <= fin.show.StartTime + fin.show.Duration &&
+                                   new_show.show.StartTime + new_show.show.Duration >= fin.show.StartTime + fin.show.Duration)
+                                    select fin;
+
+                if (collidedShows.Any())
+                {
+                    Debug.WriteLine("collidedShows for" + new_show.show.Name + ":" + collidedShows.Count());
+
+                    TimeSpan newTimeSpan = FindFreeTimeSpan(ref final, new_show.show.StartTime, new_show.show.Duration);
+
+                    Debug.WriteLine("found new timespan:" + newTimeSpan.ToString());
+
+                    new_show.show.StartTime = newTimeSpan;
+
+                    final.Add(new_show);
+
+                }
+                else
+                {
+                    Debug.WriteLine("NO collidedShows for" + new_show.show.Name + ":" + collidedShows.Count());
+                    Debug.WriteLine("Adding " + new_show.show.Name);
+                    final.Add(new_show);
+
+                    foreach (var item in final)
+                    {
+                        Debug.WriteLine(item.show.Name);
+                    }
+
+                    
+                }
+
+                showsPriorityP.RemoveAt(0);
+            }
+
+
+
+
+        }
+
         private List<ScheduleItem_show> CrossCheckShows(
             List<ScheduleItem_show> shows,
             List<ScheduleItem_show> final)
@@ -55,6 +153,8 @@ namespace TvManager.View.View
 
             if (final.Count > 0)
             {
+
+                // if show fits perfectly in the schedule without additional movements
                 var perfectShows = from show in shows
                                    from fin in final
                                    where (show.show.StartTime + show.show.Duration <= fin.show.StartTime ||
@@ -105,6 +205,13 @@ namespace TvManager.View.View
 
             all_shows.RemoveAll(i => some_shows.Contains(i));
         }
+
+
+        
+
+
+
+
         private List<ScheduleItem_show> GetAndRemoveShowsOfPriority(int priority, ref List<ScheduleItem_show> shows)
         {
 
@@ -194,7 +301,7 @@ namespace TvManager.View.View
             var final_shows = new List <ScheduleItem_show>();
 
 
-            for(int p = 10; p >= 6; p--)
+            for(int p = 10; p >= 8; p--)
             {
                 Debug.WriteLine("P = " + p);
 
@@ -205,12 +312,30 @@ namespace TvManager.View.View
                 Debug.WriteLine("       Shows left <p:" + all_shows.Count);
                 Debug.WriteLine("       all shows of this p:" + currentShows.Count);
 
+                foreach(var currentShow in currentShows)
+                {
+                    Debug.WriteLine("           " + currentShow.show.Name);
+                }
+
                 //ADD DELEGATION TO SMALLER PRIORITY IF NOT VALID
-                var valid = CrossCheckShows(currentShows, final_shows);
 
-                Debug.WriteLine("       valid:" + valid.Count);
 
-                ConfirmAndRemoveShows(ref all_shows, valid, ref final_shows);
+                //var valid = CrossCheckShows(currentShows, final_shows);
+
+                CrossCheckShows2(currentShows, ref final_shows);
+
+
+
+               // Debug.WriteLine("       valid:" + valid.Count);
+
+                //foreach (var currentShow in valid)
+                //{
+                //    Debug.WriteLine("           " + currentShow.show.Name);
+                //}
+
+                all_shows.RemoveAll(i => currentShows.Contains(i));
+
+                //ConfirmAndRemoveShows(ref all_shows, valid, ref final_shows);
 
                 
 
