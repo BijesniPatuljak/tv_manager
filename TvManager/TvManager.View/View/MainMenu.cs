@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using TvManager.Model.Models;
 namespace TvManager.View.View
 {
     using System.Windows.Forms;
@@ -16,6 +16,9 @@ namespace TvManager.View.View
         private IShowService showService;
         private IAdService adService;
         public object lb_item = null;
+
+        public List<Show> final_shows = new List<Show>();
+        public List<Ad> final_ads = new List<Ad>();
 
         private static List<object> Emisije_i_Reklame = new List<object>();
 
@@ -40,14 +43,24 @@ namespace TvManager.View.View
 
         private void FillListBox()
         {
-            MainShows.Items.Clear();
+            //MainShows.Items.Clear();
             MainAds.Items.Clear();
+            MainSchedule.Items.Clear();
+            show_table.Rows.Clear();
+
 
             var shows = showService.GetAllShows();
 
             foreach (var item in shows)
             {
-                MainShows.Items.Add(item.Name + " " + item.StartTime + " " + item.Duration + " P:" + item.Priority);
+                //MainShows.Items.Add(item.Name + " " + item.StartTime + " " + item.Duration + " P:" + item.Priority);
+
+                string[] row = { item.Name, item.StartTime.ToString(), item.Duration.ToString() };
+
+                show_table.Rows.Add(row);
+
+
+
             }
 
             var ads = adService.GetAds();
@@ -56,6 +69,19 @@ namespace TvManager.View.View
             {
                 MainAds.Items.Add(item.Name + " " + item.StartTime + " " + item.Duration + " P:" + item.Priority);
             }
+
+
+
+            foreach (var show in final_shows)
+            {
+                MainSchedule.Items.Add(show.StartTime.ToString() + " " + show.Duration.ToString() + "  " + show.Name + " P:" + show.Priority);
+            }
+            foreach (var ad in final_ads)
+            {
+                MainSchedule.Items.Add(ad.StartTime.ToString() + " " + ad.Duration.ToString() + " AD " + ad.Name + " P:" + ad.Priority);
+            }
+
+            MainSchedule.Sorted = true;
         }
 
         private void MainMenu_Load(object sender, EventArgs e)
@@ -82,7 +108,14 @@ namespace TvManager.View.View
         private void buttonGenerate_Click(object sender, EventArgs e)
         {
             ViewSchedule form = new ViewSchedule(this.showService,this.adService);
-            form.ShowDialog();
+            var result = form.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                final_ads = form.final_ads;           
+                final_shows = form.final_shows;
+                
+            }
 
             FillListBox();
         }
@@ -206,11 +239,12 @@ namespace TvManager.View.View
         private void delete_show_Click(object sender, EventArgs e)
         {
 
-            var ind = MainShows.SelectedIndex;
+            //var ind = MainShows.SelectedIndex;
+            var ind = show_table.SelectedRows[0];
 
             var shows = showService.GetAllShows().ToList();
 
-            showService.DeleteShow(shows[ind]);
+            showService.DeleteShow(shows[ind.Index]);
 
 
             FillListBox();
@@ -220,6 +254,16 @@ namespace TvManager.View.View
         {
             showService.DeleteAllShows();
             FillListBox();
+        }
+
+        private void MainSchedule_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void result_table_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

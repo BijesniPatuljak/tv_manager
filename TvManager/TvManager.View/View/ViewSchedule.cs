@@ -25,6 +25,8 @@ namespace TvManager.View.View
         private IShowService showService;
         private IAdService adService;
 
+        public List<Show> final_shows = new List<Show>();
+        public List<Ad> final_ads = new List<Ad>();
 
         List<object>? obavezne = MainMenu.emisije_i_reklame;
 
@@ -301,8 +303,7 @@ namespace TvManager.View.View
             var all_shows = showService.GetAllShows().ToList();
             var all_ads = adService.GetAds().ToList();
 
-            var final_shows = new List <Show>();
-            var final_ads = new List<Ad>();
+            
 
             for (int p = 10; p >= 2; p--)
             {
@@ -354,6 +355,12 @@ namespace TvManager.View.View
         private void ViewSchedule_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
     }
 }
