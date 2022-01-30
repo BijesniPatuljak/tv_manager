@@ -34,15 +34,17 @@ namespace TvManager.View.View
             ref List<Show> final,
             TimeSpan preffered,
             TimeSpan duration,
-            bool searchForAd =false
+            bool searchForAd =false,
+            List<Ad> final_ads = null
             )
         {
             TimeSpan newTimeSpan;
 
             int step = searchForAd ? 1 : 5;
 
+            
 
-            for (int i = 5; i < 1000; i += step)
+            for (int i = step; i < 1000; i += step)
             {
                 newTimeSpan = preffered + TimeSpan.FromMinutes(i);
 
@@ -52,7 +54,24 @@ namespace TvManager.View.View
                                         duration,
                                         fin.StartTime,
                                         fin.Duration)
-                                    select fin;
+                                    select fin.Id;
+
+                if (searchForAd)
+                {
+                     var collidedAds = from fin in final_ads
+                                       where check_collision(
+                                            newTimeSpan,
+                                            duration,
+                                            fin.StartTime,
+                                            fin.Duration)
+                                        select fin.Id; 
+
+                    collidedShows.Concat(collidedAds);
+                }
+                   
+
+
+
                 if (collidedShows.Count() == 0)
                 {
                     Debug.WriteLine(i + " " + newTimeSpan.ToString() + " " + duration.ToString());
@@ -65,19 +84,34 @@ namespace TvManager.View.View
                     return newTimeSpan;
                 }
 
-                //newTimeSpan = preffered - TimeSpan.FromMinutes(i);
+                newTimeSpan = preffered - TimeSpan.FromMinutes(i);
 
-                //var collidedShows2 = from fin in final
-                //                    where (newTimeSpan < fin.show.StartTime &&
-                //                   newTimeSpan + duration > fin.show.StartTime) ||
-                //                   (newTimeSpan < fin.show.StartTime + fin.show.Duration &&
-                //                   newTimeSpan + duration > fin.show.StartTime + fin.show.Duration)
-                //                    select fin;
-                //if (collidedShows2.Count() == 0)
-                //{
-                //    Debug.WriteLine(i + " " + newTimeSpan.ToString() + " " + duration.ToString());
-                //    return newTimeSpan;
-                //}
+                var collidedShows2 = from fin in final
+                                    where check_collision(
+                                        newTimeSpan,
+                                        duration,
+                                        fin.StartTime,
+                                        fin.Duration)
+                                    select fin.Id;
+
+                if (searchForAd)
+                {
+                    var collidedAds = from fin in final_ads
+                                      where check_collision(
+                                           newTimeSpan,
+                                           duration,
+                                           fin.StartTime,
+                                           fin.Duration)
+                                      select fin.Id;
+
+                    collidedShows2.Concat(collidedAds);
+                }
+
+                if (collidedShows2.Count() == 0)
+                {
+                    Debug.WriteLine(i + " " + newTimeSpan.ToString() + " " + duration.ToString());
+                    return newTimeSpan;
+                }
 
 
             }
@@ -118,9 +152,24 @@ namespace TvManager.View.View
 
                 if (collidedAds.Any() || collidedAds2.Any())
                 {
-                    Debug.WriteLine("collidedShows for " + new_ad.Name + ":" + collidedAds.Count());
+                    Debug.WriteLine("collidedAds for " + new_ad.Name + ":" + collidedAds.Count());
+                    Debug.WriteLine("collidedShows for " + new_ad.Name + ":" + collidedAds2.Count());
 
-                    TimeSpan newTimeSpan = FindFreeTimeSpan(ref final_shows, new_ad.StartTime, new_ad.Duration,true);
+                    foreach (var item in collidedAds)
+                    {
+                        Debug.WriteLine("collided ads: " + item.Name);
+                    }
+                    foreach (var item in collidedAds2)
+                    {
+                        Debug.WriteLine("collided shows: " + item.Name);
+                    }
+
+                    TimeSpan newTimeSpan = FindFreeTimeSpan(
+                        ref final_shows, 
+                        new_ad.StartTime, 
+                        new_ad.Duration,
+                        true,
+                        final);
 
                     Debug.WriteLine("found new timespan: " + newTimeSpan.ToString());
 
@@ -156,15 +205,18 @@ namespace TvManager.View.View
             TimeSpan show2_start,
             TimeSpan show2_duration)
         {
-            //Debug.WriteLine("comparing: [" + show1_start + ", " + show1_duration + "], [ " + show2_start + ", " + show2_duration + "]");
-            return (show1_start <= show2_start &&
-                    show1_start + show1_duration >= show2_start) ||
-                    (show1_start <= show2_start + show2_duration &&
-                    show1_start + show1_duration >= show2_start + show2_duration) ||
-                    (show1_start >= show2_start &&
-                    show1_start + show1_duration <= show2_start + show2_duration) ||
-                    (show2_start >= show1_start &&
-                    show2_start + show2_duration <= show1_start + show1_duration);
+
+            var rez = (show1_start < show2_start && show1_start + show1_duration > show2_start) ||
+                    (show1_start < show2_start + show2_duration && show1_start + show1_duration > show2_start + show2_duration) ||
+                    (show1_start > show2_start && show1_start + show1_duration < show2_start + show2_duration) ||
+                    (show2_start > show1_start && show2_start + show2_duration < show1_start + show1_duration) ||
+                    (show1_start == show2_start) ||
+                    (show1_start + show1_duration == show2_start + show2_duration);
+                    
+
+            Debug.WriteLine("comparing: [" + show1_start + ", " + show1_duration + "], [ " + show2_start + ", " + show2_duration + "] = " + rez);
+
+            return rez;
         }
 
 
@@ -189,13 +241,16 @@ namespace TvManager.View.View
                                         fin.Duration)
                                     select fin;
 
-                if (collidedShows.Any())
+
+
+
+                if (collidedShows.Count() > 0)
                 {
-                    Debug.WriteLine("collidedShows for" + new_show.Name + ":" + collidedShows.Count());
+                    //Debug.WriteLine("collidedShows for" + new_show.Name + ":" + collidedShows.Count());
 
-                    TimeSpan newTimeSpan = FindFreeTimeSpan(ref final, new_show.StartTime, new_show.Duration);
+                    TimeSpan newTimeSpan = FindFreeTimeSpan(ref final, new_show.StartTime, new_show.Duration + TimeSpan.FromMinutes(10));
 
-                    Debug.WriteLine("found new timespan:" + newTimeSpan.ToString());
+                    //Debug.WriteLine("found new timespan:" + newTimeSpan.ToString());
 
                     new_show.StartTime = newTimeSpan + TimeSpan.FromMinutes(5);
 
@@ -204,15 +259,11 @@ namespace TvManager.View.View
                 }
                 else
                 {
-                    Debug.WriteLine("NO collidedShows for" + new_show.Name + ":" + collidedShows.Count());
-                    Debug.WriteLine("Adding " + new_show.Name);
+                    //Debug.WriteLine("NO collidedShows for" + new_show.Name + ":" + collidedShows.Count());
+                    //Debug.WriteLine("Adding " + new_show.Name);
                     final.Add(new_show);
 
-                    foreach (var item in final)
-                    {
-                        Debug.WriteLine(item.Name);
-                    }
-
+                    
                     
                 }
 
@@ -262,24 +313,22 @@ namespace TvManager.View.View
             this.adService = adService;
             InitializeComponent();
 
- 
-            //var schedule_ads = new List<ScheduleItem_Ad>();
             var all_shows = showService.GetAllShows().ToList();
             var all_ads = adService.GetAds().ToList();
 
             var final_shows = new List <Show>();
             var final_ads = new List<Ad>();
 
-            for (int p = 10; p >= 6; p--)
+            for (int p = 10; p >= 2; p--)
             {
-                Debug.WriteLine("P = " + p);
+                //Debug.WriteLine("P = " + p);
 
-                Debug.WriteLine("       All shows left <=p:" + all_shows.Count);
+                //Debug.WriteLine("       All shows left <=p:" + all_shows.Count);
 
                 var currentShows = GetAndRemoveShowsOfPriority(p, ref all_shows);
 
-                Debug.WriteLine("       Shows left <p:" + all_shows.Count);
-                Debug.WriteLine("       all shows of this p:" + currentShows.Count);
+                //Debug.WriteLine("       Shows left <p:" + all_shows.Count);
+                //Debug.WriteLine("       all shows of this p:" + currentShows.Count);
 
                 foreach(var currentShow in currentShows)
                 {

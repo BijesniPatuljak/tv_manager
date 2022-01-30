@@ -33,6 +33,16 @@ namespace TvManager.View.View
             this.adService = adService;
             InitializeComponent();
 
+            FillListBox();
+
+
+        }
+
+        private void FillListBox()
+        {
+            MainShows.Items.Clear();
+            MainAds.Items.Clear();
+
             var shows = showService.GetAllShows();
 
             foreach (var item in shows)
@@ -46,8 +56,6 @@ namespace TvManager.View.View
             {
                 MainAds.Items.Add(item.Name + " " + item.StartTime + " " + item.Duration + " P:" + item.Priority);
             }
-
-
         }
 
         private void MainMenu_Load(object sender, EventArgs e)
@@ -59,36 +67,48 @@ namespace TvManager.View.View
         {
             ViewShows form = new ViewShows(this.showService, this.adService);
             form.ShowDialog();
+
+            FillListBox();
         }
 
         private void buttonViewAds_Click(object sender, EventArgs e)
         {
             ViewAds form = new ViewAds(this.showService, this.adService);
             form.ShowDialog();
+
+            FillListBox();
         }
 
         private void buttonGenerate_Click(object sender, EventArgs e)
         {
             GenerateSchedule form = new GenerateSchedule(this.showService,this.adService);
             form.ShowDialog();
+
+            FillListBox();
         }
 
         private void buttonAddAd_Click(object sender, EventArgs e)
         {
             EditAd form = new EditAd(this.showService, this.adService);
             form.ShowDialog();
+
+            FillListBox();
         }
 
         private void buttonAddShow_Click(object sender, EventArgs e)
         {
             EditShow form = new EditShow(this.showService, this.adService);
             form.ShowDialog();
+
+            FillListBox();
         }
 
         private void MainShows_DoubleClick(object sender, EventArgs e)
         {
             EditShow form = new EditShow(this.showService, this.adService);
             form.ShowDialog();
+
+
         }
 
         private void MainAds_DoubleClick(object sender, EventArgs e)
@@ -148,6 +168,14 @@ namespace TvManager.View.View
         {
             string text = MainAds.GetItemText(MainAds.SelectedItem);
 
+            var ind = MainAds.SelectedIndex;
+
+            var ads = adService.GetAds().ToList();
+
+            adService.DeleteAd(ads[ind]);
+
+
+            FillListBox();
 
 
 
@@ -160,7 +188,10 @@ namespace TvManager.View.View
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
+            adService.DeleteAllAds();
+
+
+            FillListBox();
         }
     }
 }

@@ -6,6 +6,11 @@
 
     public interface IAdService
     {
+
+        void DeleteAd(Ad ad);
+
+        void DeleteAllAds();
+
         IEnumerable<Ad> GetAds();
         Ad GetAd(Guid adId);
         void SaveAd(Ad ad);

@@ -95,7 +95,7 @@
             // 
             this.MainAds.FormattingEnabled = true;
             this.MainAds.ItemHeight = 15;
-            this.MainAds.Location = new System.Drawing.Point(304, 25);
+            this.MainAds.Location = new System.Drawing.Point(12, 25);
             this.MainAds.Name = "MainAds";
             this.MainAds.Size = new System.Drawing.Size(261, 94);
             this.MainAds.TabIndex = 5;
@@ -106,7 +106,7 @@
             // 
             this.MainShows.FormattingEnabled = true;
             this.MainShows.ItemHeight = 15;
-            this.MainShows.Location = new System.Drawing.Point(12, 25);
+            this.MainShows.Location = new System.Drawing.Point(304, 25);
             this.MainShows.Name = "MainShows";
             this.MainShows.Size = new System.Drawing.Size(256, 94);
             this.MainShows.TabIndex = 6;

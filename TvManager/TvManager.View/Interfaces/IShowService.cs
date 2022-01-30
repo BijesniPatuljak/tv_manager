@@ -6,6 +6,9 @@
 
     public interface IShowService
     {
+        void DeleteShow(Show show);
+
+        void DeleteAllShows();
         IEnumerable<Show> GetAllShows();
         Show GetShow(Guid id);
         void SaveShow(Show show);
