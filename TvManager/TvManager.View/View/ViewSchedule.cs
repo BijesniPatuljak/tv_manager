@@ -38,22 +38,28 @@ namespace TvManager.View.View
             InitializeComponent();
 
 
+            //dohvacanje servisa kroz koje se updejta baza
             var all_shows = showService.GetAllShows().ToList();
             var all_ads = adService.GetAds().ToList();
 
-            for (int p = 10; p >= 2; p--)
+
+            //prodi kroz sve prioritete Showova
+            for (int p = 10; p >= 3; p--)
             {
 
+                //uzmi sve Showove prioriteta p
                 var currentShows = GetAndRemoveShowsOfPriority(p, ref all_shows);
 
+                //redom ih ubacuj u final_shows,ako treba promijeni termin ako ne stane
                 CrossCheckShows(currentShows, ref final_shows);
 
+                //makni ih iz popisa preostalih Showova
                 all_shows.RemoveAll(i => currentShows.Contains(i));
             }
 
 
-
-            for (int p = 10; p >= 2; p--)
+            //Ads: isto kao za Shows
+            for (int p = 10; p >= 3; p--)
             {
                 Debug.WriteLine("P = " + p);
 
@@ -66,9 +72,7 @@ namespace TvManager.View.View
 
             }
 
-            //Sortira listu prema planiranom vremenu pocetka
-
-
+            //ispisi u tablicu ono sto se dobije u final_shows/final_ads
             foreach (var show in final_shows)
             {
                 string[] row = {
@@ -94,7 +98,8 @@ namespace TvManager.View.View
 
         }
 
-
+        //nadi dobar termin za show/ad (gleda sve vec spremljene showove u final
+        //te trazi dobar termin)
         private TimeSpan FindFreeTimeSpan(
             ref List<Show> final,
             TimeSpan preffered,
@@ -104,12 +109,10 @@ namespace TvManager.View.View
             )
         {
 
-             TimeSpan newTimeSpan;
-
+            TimeSpan newTimeSpan;
             int step = searchForAd ? 1 : 5;
-
-            
-
+ 
+            //iterira po vremenu u periodima od 1 ili 5 minuta i gleda jel se termin preklapa
             for (int i = step; i < 1000; i += step)
             {
                 newTimeSpan = preffered + TimeSpan.FromMinutes(i);
@@ -180,7 +183,7 @@ namespace TvManager.View.View
             return new TimeSpan(0, 0, 0);
         }
 
-
+        //gura Adse u final_ads jedan po jedan,te premjesta termin ako je potrebno
         private void CrossCheckAds(
             List<Ad> adsPriorityP,
             ref List<Ad> final,
@@ -191,9 +194,6 @@ namespace TvManager.View.View
             {
                 var new_ad = adsPriorityP.First();
 
-                
-
-                
 
 
                 var collidedAds = from fin in final
@@ -246,6 +246,9 @@ namespace TvManager.View.View
             }
         }
 
+
+
+        //provjerava koliju izmedu 2 termina, vraca true ako kolizija postoji,false inace
         private bool check_collision(
             TimeSpan show1_start,
             TimeSpan show1_duration,
@@ -266,7 +269,7 @@ namespace TvManager.View.View
         }
 
 
-
+        //identicno kao za Ads
         private void CrossCheckShows(
             List<Show> showsPriorityP,
             ref List<Show> final
@@ -320,7 +323,7 @@ namespace TvManager.View.View
         }
 
 
-
+        //vraca Adse prioriteta p i mice ih iz popisa svih Adsa
         private List<Ad> GetAndRemoveAdsOfPriority(int p, ref List<Ad> all_ads)
         {
             var adsOfPriority =
@@ -334,7 +337,7 @@ namespace TvManager.View.View
 
             return list;
         }
-
+        //vraca Showove prioriteta p i mice ih iz popisa svih Showova
         private List<Show> GetAndRemoveShowsOfPriority(int priority, ref List<Show> shows)
         {
 

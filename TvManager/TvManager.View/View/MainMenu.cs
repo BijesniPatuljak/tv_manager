@@ -42,6 +42,7 @@ namespace TvManager.View.View
 
         }
 
+        //Ponovo iscrtava sve tablice 
         private void FillListBox()
         {
             
