@@ -17,11 +17,52 @@ namespace TvManager.View.View
     {
         private IShowService showService;
         private IAdService adService;
-        public EditAd(IShowService showService, IAdService adService)
+        private int index;
+
+        private Ad old_ad;
+
+        private List<RadioButton> radioButtons= new List<RadioButton>();
+
+        public EditAd(IShowService showService, IAdService adService,int index = -1)
         {
+            this.index = index;
             this.showService = showService;
             this.adService = adService;
             InitializeComponent();
+
+            radioButtons.Add(radio9);
+            radioButtons.Add(radio8);
+            radioButtons.Add(radio7);
+            radioButtons.Add(radio6);
+            radioButtons.Add(radio5);
+            radioButtons.Add(radio4);
+            radioButtons.Add(radio3);
+
+            textBox4.ReadOnly = true;
+
+
+
+            
+
+
+            if (index != -1)
+            {
+                old_ad = adService.GetAds().ToList()[index];
+
+                textBox4.Text = old_ad.Id.ToString();
+                textBox1.Text = old_ad.Name.ToString();
+                textBox2.Text = old_ad.Duration.ToString();
+                ad_start.Text = old_ad.StartTime.ToString();
+                textBox3.Text = old_ad.Cost.ToString();
+
+                radioButtons[9- old_ad.Priority].Checked = true;
+               
+            }
+            else
+            {
+                textBox4.Text = Guid.NewGuid().ToString();
+            }
+
         }
 
 
@@ -34,15 +75,28 @@ namespace TvManager.View.View
         {
             var checkedButton = groupBox1.Controls.OfType<RadioButton>()
                                       .FirstOrDefault(r => r.Checked).Text;
-            textBox1.Text = checkedButton.ToString();
+            
 
             Ad ad = new Ad();
-            ad.Id = Guid.NewGuid();
+            ad.Id = Guid.Parse(textBox4.Text);
             ad.Name = textBox1.Text;
+            ad.Priority = Int32.Parse(checkedButton);
             ad.Duration = TimeSpan.Parse(textBox2.Text);
+            ad.StartTime = TimeSpan.Parse(ad_start.Text);
             ad.Cost = decimal.Parse(textBox3.Text);
 
-            adService.SaveAd(ad);
+
+            if (index == -1)
+            {
+                adService.SaveAd(ad);
+            }
+            else
+            {
+                adService.UpdateAd(old_ad, ad);
+            }
+
+            Close();
+            
 
         }
 
@@ -83,6 +137,11 @@ namespace TvManager.View.View
         }
 
         private void EditAd_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ad_start_TextChanged(object sender, EventArgs e)
         {
 
         }

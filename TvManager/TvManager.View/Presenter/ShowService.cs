@@ -16,12 +16,30 @@
         {
             this.dbContext = dbContext;
         }
+
+        public void DeleteShow(Show show)
+        {
+            this.dbContext.Remove(show);
+            this.dbContext.SaveChanges();
+        }
+
+        public void DeleteAllShows()
+        {
+            this.dbContext.RemoveRange(dbContext.Shows);
+            this.dbContext.SaveChanges();
+        }
         public IEnumerable<Show> GetAllShows() => this.dbContext.Shows.ToList();
         public Show GetShow(Guid id) => this.dbContext.Shows.Single(show => show.Id == id);
         public void SaveShow(Show show)
         {
             this.dbContext.Add(show);
             this.dbContext.SaveChanges();
-        } 
+        }
+
+        public void UpdateShow(Show old, Show new_show)
+        {
+            this.DeleteShow(old);
+            this.SaveShow(new_show);
+        }
     }
 }

@@ -31,7 +31,6 @@ namespace TvManager.View
             services.AddScoped<ViewShows>();
             services.AddScoped<EditAd>();
             services.AddScoped<EditShow>();
-            services.AddScoped<GenerateSchedule>();
 
             using (ServiceProvider serviceProvider = services.BuildServiceProvider())
             {
@@ -40,7 +39,6 @@ namespace TvManager.View
 
             }
 
-            
 
         }
 
